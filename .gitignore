@@ -1,0 +1,45 @@
+# ROS2 build artifacts
+build/
+install/
+log/
+**/COLCON_IGNORE
+
+# rosdep
+.ros/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*$py.class
+.pytest_cache/
+
+# C++ build
+*.a
+*.lib
+
+# Editor
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+
+# OS
+.DS_Store
+EOF
+
+# Webots
+# Compiled controllers (C/C++)
+*.o
+*.so
+*.dylib
+*.exe
+
+# Webots cached/generated files & worlds backups
+*.wbproj
+*~.wbt
+*.bak
+worlds/*_backup/
+crash_report/
+
+
