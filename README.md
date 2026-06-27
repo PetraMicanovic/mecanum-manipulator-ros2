@@ -9,7 +9,7 @@ arm, driven from a single ROS2 application.
 
 - Ubuntu 24.04
 - ROS2 Jazzy
-- Webots + `webots_ros2`
+- Webots R2025a + `webots_ros2`
 
 ---
 

@@ -1,0 +1,282 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/RoughConcrete.proto"
+
+WorldInfo {
+  contactProperties [
+    DEF interiorWheelMat ContactProperties {
+      material1 "interiorWheelMat"
+      coulombFriction [
+        0, 2, 0
+      ]
+      frictionRotation -0.785 0
+      bounce 0
+      forceDependentSlip [
+        10, 0
+      ]
+    }
+    DEF exteriorWheelMat ContactProperties {
+      material1 "exteriorWheelMat"
+      coulombFriction [
+        0, 2, 0
+      ]
+      frictionRotation 0.785 0
+      bounce 0
+      forceDependentSlip [
+        10, 0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.15506448961272878 0.14687596976496722 0.9769249989465643 1.624367619392234
+  position -1.0675093567398122 -5.420165511784614 2.41261821095185
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  translation 0.24 0 0
+  floorSize 10 8
+  floorAppearance RoughConcrete {
+  }
+  wallHeight 1
+}
+Robot {
+  translation 0 0 0.1015
+  children [
+    DEF chassis_visual Shape {
+      appearance PBRAppearance {
+        baseColor 0.6 0.6 0.6
+        roughness 0.5
+        metalness 0.4
+      }
+      geometry Mesh {
+        url [
+          "../meshes/chassis.stl"
+        ]
+      }
+    }
+    DEF lidar Lidar {
+      translation 0.4583 0 0.0927
+      children [
+        DEF lidar_visual Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.4 0.2
+            metalness 0.2
+          }
+          geometry Mesh {
+            url [
+              "../meshes/livox_mount.stl"
+            ]
+          }
+        }
+      ]
+      boundingObject Pose {
+        translation -0.032 0 -0.014
+        children [
+          Box {
+            size 0.097 0.064 0.088
+          }
+        ]
+      }
+      physics Physics {
+      }
+      horizontalResolution 360
+      fieldOfView 1.229
+      verticalFieldOfView 1.229
+      numberOfLayers 64
+      minRange 0.05
+      maxRange 20
+    }
+    DEF lidar2 Lidar {
+      translation -0.4583 0 0.0927
+      rotation 0 0 1 3.14159
+      children [
+        DEF lidar2_visual Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.4 0.2
+            metalness 0.2
+          }
+          geometry Mesh {
+            url [
+              "../meshes/livox_mount.stl"
+            ]
+          }
+        }
+      ]
+      name "lidar2"
+      boundingObject Pose {
+        translation -0.032 0 -0.014
+        children [
+          Box {
+            size 0.097 0.064 0.088
+          }
+        ]
+      }
+      physics Physics {
+      }
+      horizontalResolution 360
+      fieldOfView 1.229
+      verticalFieldOfView 1.229
+      numberOfLayers 64
+      minRange 0.05
+      maxRange 20
+    }
+    DEF wheel1 HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor 0.2505 0.26536 0
+      }
+      device [
+        DEF encoder1 PositionSensor {
+          name "encoder1"
+        }
+        DEF motor1 RotationalMotor {
+          name "motor1"
+        }
+      ]
+      endPoint Solid {
+        translation 0.2505 0.26536 0
+        rotation 1 0 0 1.57
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              metalness 0
+            }
+            geometry DEF wheel Cylinder {
+              height 0.077
+              radius 0.1015
+            }
+          }
+        ]
+        contactMaterial "exteriorWheelMat"
+        boundingObject USE wheel
+        physics Physics {
+        }
+      }
+    }
+    DEF wheel2 HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor 0.2505 -0.26536 0
+      }
+      device [
+        DEF encoder2 PositionSensor {
+          name "encoder2"
+        }
+        DEF motor2 RotationalMotor {
+          name "motor2"
+        }
+      ]
+      endPoint Solid {
+        translation 0.2505 -0.26536 0
+        rotation 1 0 0 1.57
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              metalness 0
+            }
+            geometry DEF wheel Cylinder {
+              height 0.077
+              radius 0.1015
+            }
+          }
+        ]
+        name "solid(1)"
+        contactMaterial "interiorWheelMat"
+        boundingObject USE wheel
+        physics Physics {
+        }
+      }
+    }
+    DEF wheel3 HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor -0.2505 0.26536 0
+      }
+      device [
+        DEF encoder3 PositionSensor {
+          name "encoder3"
+        }
+        DEF motor3 RotationalMotor {
+          name "motor3"
+        }
+      ]
+      endPoint Solid {
+        translation -0.2505 0.26536 0
+        rotation 1 0 0 1.57
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              metalness 0
+            }
+            geometry DEF wheel Cylinder {
+              height 0.077
+              radius 0.1015
+            }
+          }
+        ]
+        name "solid(2)"
+        contactMaterial "interiorWheelMat"
+        boundingObject USE wheel
+        physics Physics {
+        }
+      }
+    }
+    DEF wheel4 HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor -0.2505 -0.26536 0
+      }
+      device [
+        DEF encoder4 PositionSensor {
+          name "encoder4"
+        }
+        DEF motor4 RotationalMotor {
+          name "motor4"
+        }
+      ]
+      endPoint Solid {
+        translation -0.2505 -0.26536 0
+        rotation 1 0 0 1.57
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              metalness 0
+            }
+            geometry DEF wheel Cylinder {
+              height 0.077
+              radius 0.1015
+            }
+          }
+        ]
+        name "solid(3)"
+        contactMaterial "exteriorWheelMat"
+        boundingObject USE wheel
+        physics Physics {
+        }
+      }
+    }
+  ]
+  name "mobile_platform"
+  boundingObject Pose {
+    translation -0.0185 0 0.186
+    children [
+      Box {
+        size 0.9 0.54 0.456
+      }
+    ]
+  }
+  physics Physics {
+  }
+  controller "<extern>"
+}
