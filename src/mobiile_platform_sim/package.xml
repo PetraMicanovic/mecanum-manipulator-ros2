@@ -8,16 +8,29 @@
   <license>MIT</license>
 
   <buildtool_depend>ament_python</buildtool_depend>
-
+  
+  <!-- ROS2 core -->
   <exec_depend>rclpy</exec_depend>
+  <!--Message types used in mecanum_robot_driver and odometry_publisher -->
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <!-- TF2 -->
+  <exec_depend>tf2_ros</exec_depend>
+  <!-- Robot and joint state publishers -->
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
-  <exec_depend>webots_ros2</exec_depend>
-
+  <!-- Webots ROS2 driver -->
+  <exec_depend>webots_ros2_driver</exec_depend>
+  <!-- Navigation -->
   <exec_depend>nav2_bringup</exec_depend>
   <exec_depend>navigation2</exec_depend>
   <exec_depend>slam_toolbox</exec_depend>
 
+  <!-- Python libraries -->
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-scipy</exec_depend>
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
