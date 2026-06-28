@@ -17,6 +17,7 @@ WorldInfo {
       forceDependentSlip [
         10, 0
       ]
+      softCFM 0.0001
     }
     DEF exteriorWheelMat ContactProperties {
       material1 "exteriorWheelMat"
@@ -28,12 +29,13 @@ WorldInfo {
       forceDependentSlip [
         10, 0
       ]
+      softCFM 0.0001
     }
   ]
 }
 Viewpoint {
-  orientation -0.15506448961272878 0.14687596976496722 0.9769249989465643 1.624367619392234
-  position -1.0675093567398122 -5.420165511784614 2.41261821095185
+  orientation -0.16968401533511562 0.13702935340100225 0.975925351267327 1.7848591310383097
+  position -0.3405750322645957 -5.492191818025629 2.5468330370435672
 }
 TexturedBackground {
 }
@@ -48,6 +50,7 @@ RectangleArena {
 }
 Robot {
   translation 0 0 0.1015
+  name "mobile_platform"
   children [
     DEF chassis_visual Shape {
       appearance PBRAppearance {
@@ -267,7 +270,6 @@ Robot {
       }
     }
   ]
-  name "mobile_platform"
   boundingObject Pose {
     translation -0.0185 0 0.186
     children [
