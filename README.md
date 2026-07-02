@@ -47,7 +47,7 @@ ros2 run demo_app demo_controller --ros-args -p mode:=sequence
 
 The `demo_app` package provides two ways to drive the platform.
 
-**Keyboard mode** (default) — press a key to move, release to stop:
+**Keyboard mode** (default) — press a key to move, any other key to stop:
 
 | Key | Motion |
 |-----|--------|
@@ -60,7 +60,7 @@ The `demo_app` package provides two ways to drive the platform.
 | any other | Stop |
 | `Ctrl+C` | Quit |
 
-**Sequence mode** — the platform runs through a fixed choreography automatically (forward → strafe → rotate → stop) and exits when done. Edit `PLATFORM_SEQUENCE` in `demo_app/demo_controller.py` to change the steps.
+**Sequence mode** — the platform runs through a fixed choreography automatically and exits when done. Translational steps are specified in metres, rotational steps in degrees — duration is computed automatically from the distance and the default velocity. Edit `PLATFORM_SEQUENCE` in `demo_app/demo_controller.py` to change the steps.
 
 ---
 
@@ -108,7 +108,7 @@ src/
 │
 └── demo_app/                         Platform control application
     └── demo_app/
-        └── demo_controller.py        Keyboard and sequence control modes
+        └── demo_controller.py        Keyboard, sequence, and terminal control modes
 ```
 
 ---
