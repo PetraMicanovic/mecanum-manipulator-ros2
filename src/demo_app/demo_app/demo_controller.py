@@ -1,11 +1,15 @@
 """
-ROS2 node for controlling the mecanum-wheeled mobile platform in two modes, selected via the ROS2 parameter 'mode' at launch time.
+
+ROS2 node for controlling the mecanum-wheeled mobile platform in three modes, selected via the ROS2 parameter 'mode' at launch time.
 
 Modes:
     keyboard
         Single-key WASD-style control using raw terminal input. The platform moves while a recognised key is held and stops on any unrecognised key.
     sequence
         The platform executes a predefined sequence of movements autonomously.
+        Translational steps are specified in metres, rotational steps in degrees.
+    terminal
+        The user types movement commands into the terminal. Each command runs for a given duration, then the platform stops and waits for the next input.
 
 Usage:
     ros2 run demo_app demo_controller
@@ -26,6 +30,7 @@ import time
 import sys
 import tty
 import termios
+import math
 
 # Default velocities
 LINEAR_VELOCITY = 0.2  # [m/s]
@@ -33,12 +38,23 @@ ANGULAR_VELOCITY = 0.5  # [rad/s]
 
 # Key -> (vx, vy, wz)
 KEYBOARD_BINDINGS = {
-    "w": (LINEAR_VELOCITY, 0.0, 0.0),  # forward
-    "s": (-LINEAR_VELOCITY, 0.0, 0.0),  # back
-    "a": (0.0, LINEAR_VELOCITY, 0.0),  # strafe left
-    "d": (0.0, -LINEAR_VELOCITY, 0.0),  # strafe right
-    "q": (0.0, 0.0, ANGULAR_VELOCITY),  # rotate left
-    "e": (0.0, 0.0, -ANGULAR_VELOCITY),  # rotate right
+    "w": ( LINEAR_VELOCITY,  0.0,               0.0),   # forward
+    "s": (-LINEAR_VELOCITY,  0.0,               0.0),   # back
+    "a": ( 0.0,              LINEAR_VELOCITY,   0.0),   # strafe left
+    "d": ( 0.0,             -LINEAR_VELOCITY,   0.0),   # strafe right
+    "q": ( 0.0,              0.0,               ANGULAR_VELOCITY),   # rotate left
+    "e": ( 0.0,              0.0,              -ANGULAR_VELOCITY),   # rotate right
+}
+
+# Terminal mode command map: name -> (vx, vy, wz)
+COMMANDS = {
+    "forward":  ( LINEAR_VELOCITY,  0.0,               0.0),
+    "back":     (-LINEAR_VELOCITY,  0.0,               0.0),
+    "left":     ( 0.0,              LINEAR_VELOCITY,   0.0),
+    "right":    ( 0.0,             -LINEAR_VELOCITY,   0.0),
+    "rotate_l": ( 0.0,              0.0,               ANGULAR_VELOCITY),
+    "rotate_r": ( 0.0,              0.0,              -ANGULAR_VELOCITY),
+    "stop":     ( 0.0,              0.0,               0.0),
 }
 
 KEYBOARD_HELP = """
@@ -53,12 +69,15 @@ Keyboard controls:
   Ctrl+C quit
 """
 
-# Predefined autonomous sequence: (duration_s, vx, vy, wz)
+# Predefined autonomous sequence.
+# Translational steps: (type, vx, vy, wz, distance_m)  — distance in metres
+# Rotational steps:    (type, vx, vy, wz, angle_deg)   — angle in degrees
+# type: 'linear' or 'angular'
 PLATFORM_SEQUENCE = [
-    (3.0, LINEAR_VELOCITY, 0.0, 0.0),  # forward
-    (3.0, 0.0, LINEAR_VELOCITY, 0.0),  # strafe right (mecanum)
-    (3.0, 0.0, 0.0, ANGULAR_VELOCITY),  # rotate
-    (0.0, 0.0, 0.0, 0.0),  # stop
+    ("linear", LINEAR_VELOCITY, 0.0, 0.0, 1.0),  # forward 1 m
+    ("linear", 0.0, LINEAR_VELOCITY, 0.0, 0.5),  # strafe right 0.5 m
+    ("angular", 0.0, 0.0, ANGULAR_VELOCITY, 90.0),  # rotate left 90 deg
+    ("linear", 0.0, 0.0, 0.0, 0.0),  # stop
 ]
 
 
@@ -133,14 +152,34 @@ class DemoController(Node):
 
     def run_sequence(self):
         """
-        Execute the predefined PLATFORM_SEQUENCE autonomously. Each step runs for its specified duration at 10 Hz, then the platform stops and moves to the next step.
+        Execute the predefined PLATFORM_SEQUENCE autonomously.
+        Translational steps use distance [m], rotational steps use angle [deg].
+        Duration is computed automatically from the distance/angle and the
+        corresponding default velocity.
         """
         self.get_logger().info("Running predefined sequence...")
         rate_hz = 10
 
-        for duration, vx, vy, wz in PLATFORM_SEQUENCE:
+        for step in PLATFORM_SEQUENCE:
             if not rclpy.ok():
                 break
+
+            step_type, vx, vy, wz, value = step
+
+            # Compute duration from distance or angle
+            if step_type == "linear":
+                # value is distance [m]; speed is the magnitude of (vx, vy)
+                speed = math.sqrt(vx**2 + vy**2)
+                duration = value / speed if speed > 0 else 0.0
+                self.get_logger().info(f"Moving {value} m  (vx={vx}, vy={vy}, wz={wz})")
+            elif step_type == "angular":
+                # value is angle [deg]; convert to rad then divide by angular velocity
+                angle_rad = math.radians(value)
+                duration = angle_rad / abs(wz) if wz != 0 else 0.0
+                self.get_logger().info(f"Rotating {value} deg  (wz={wz})")
+            else:
+                duration = 0.0
+
             steps = int(duration * rate_hz)
             for _ in range(steps):
                 self.publish_twist(vx, vy, wz)
@@ -157,7 +196,6 @@ def main(args=None):
     rclpy.init(args=args)
     node = DemoController()
 
-    # Spin ROS2 in a background thread so input/keyboard reading does not block callbacks
     spin_thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
     spin_thread.start()
 
