@@ -1,11 +1,9 @@
 # mecanum-manipulator-ros2
-
 ROS2 simulation of a mecanum AGV platform and an RV-3SDB robotic arm, driven from a single ROS2 application.
 
 ---
 
 ## Prerequisites
-
 - Ubuntu 24.04
 - ROS2 Jazzy
 - [Webots R2025a](https://cyberbotics.com)
@@ -14,26 +12,55 @@ ROS2 simulation of a mecanum AGV platform and an RV-3SDB robotic arm, driven fro
 ---
 
 ## Quick Start
-
 ```bash
-# Clone into your workspace
+# Clone the repository
 git clone https://github.com/PetraMicanovic/mecanum-manipulator-ros2.git 
 cd mecanum-manipulator-ros2
 
 # Install dependencies
 rosdep install --from-paths src --ignore-src -r -y
-sudo apt install python3-scipy ros-jazzy-teleop-twist-keyboard
+sudo apt install python3-scipy
 
 # Build
-colcon build --packages-select mobile_platform_sim --symlink-install
+colcon build --symlink-install
 source install/setup.bash
 
-# Launch
+# Launch the simulation
 ros2 launch mobile_platform_sim mobile_platform_launch.py
-
-# Manual control
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
+
+Once the simulation is running, open a second terminal and start the demo controller:
+
+```bash
+source install/setup.bash
+
+# Keyboard control (default)
+ros2 run demo_app demo_controller
+
+# Predefined sequence
+ros2 run demo_app demo_controller --ros-args -p mode:=sequence
+```
+
+---
+
+## Controlling the Platform
+
+The `demo_app` package provides two ways to drive the platform.
+
+**Keyboard mode** (default) — press a key to move, release to stop:
+
+| Key | Motion |
+|-----|--------|
+| `w` | Forward |
+| `s` | Backward |
+| `a` | Strafe left *(mecanum only)* |
+| `d` | Strafe right *(mecanum only)* |
+| `q` | Rotate left |
+| `e` | Rotate right |
+| any other | Stop |
+| `Ctrl+C` | Quit |
+
+**Sequence mode** — the platform runs through a fixed choreography automatically (forward → strafe → rotate → stop) and exits when done. Edit `PLATFORM_SEQUENCE` in `demo_app/demo_controller.py` to change the steps.
 
 ---
 
@@ -65,20 +92,23 @@ Standard ROS2 `ament_python` workspace — every package is a direct subfolder o
 ```
 src/
 ├── mobile_platform_sim/          Webots simulation of the mecanum platform
-│   ├── launch/           
-│      └── mobile_platform_launch.py
-│   ├── meshes/     
-│      ├── chassis.stl
-│      ├── livox_mount.stl
-│      └── IntelRealSenseT265.STL   # mesh available, not yet added to simulation
-│   ├── mobile_platform_sim/      
-│      ├── mecanum_robot_driver.py
-│      └── odometry_publisher.py
-│   ├── resource/          
-│      └── mobile_platform.urdf
-└── └── worlds/            
-       └── platform.wbt
-
+│   ├── launch/
+│   │   └── mobile_platform_launch.py
+│   ├── meshes/
+│   │   ├── chassis.stl
+│   │   ├── livox_mount.stl
+│   │   └── IntelRealSenseT265.STL   # mesh available, not yet in simulation
+│   ├── mobile_platform_sim/
+│   │   ├── mecanum_robot_driver.py
+│   │   └── odometry_publisher.py
+│   ├── resource/
+│   │   └── mobile_platform.urdf
+│   └── worlds/
+│       └── platform.wbt
+│
+└── demo_app/                         Platform control application
+    └── demo_app/
+        └── demo_controller.py        Keyboard and sequence control modes
 ```
 
 ---
