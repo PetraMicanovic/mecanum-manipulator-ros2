@@ -39,13 +39,16 @@ ros2 run demo_app demo_controller
 
 # Predefined sequence
 ros2 run demo_app demo_controller --ros-args -p mode:=sequence
+
+# Terminal control
+ros2 run demo_app demo_controller --ros-args -p mode:=terminal
 ```
 
 ---
 
 ## Controlling the Platform
 
-The `demo_app` package provides two ways to drive the platform.
+The `demo_app` package provides three ways to drive the platform.
 
 **Keyboard mode** (default) — press a key to move, any other key to stop:
 
@@ -61,6 +64,27 @@ The `demo_app` package provides two ways to drive the platform.
 | `Ctrl+C` | Quit |
 
 **Sequence mode** — the platform runs through a fixed choreography automatically and exits when done. Translational steps are specified in metres, rotational steps in degrees — duration is computed automatically from the distance and the default velocity. Edit `PLATFORM_SEQUENCE` in `demo_app/demo_controller.py` to change the steps.
+
+**Terminal mode** — type a command followed by a distance in metres or an angle in degrees. The platform executes the command and waits for the next input:
+
+| Command | Argument | Effect |
+|---------|----------|--------|
+| `forward <m>` | metres | Move forward |
+| `back <m>` | metres | Move backward |
+| `left <m>` | metres | Strafe left *(mecanum only)* |
+| `right <m>` | metres | Strafe right *(mecanum only)* |
+| `rotate_l <deg>` | degrees | Rotate left |
+| `rotate_r <deg>` | degrees | Rotate right |
+| `stop` | — | Stop immediately |
+| `quit` | — | Exit |
+
+Example:
+```
+> forward 1.5
+> left 0.5
+> rotate_l 90
+> stop
+```
 
 ---
 
@@ -85,6 +109,7 @@ Available topics:
 | `/joint_states` | pub | `sensor_msgs/JointState` | State of all 4 wheels |
 
 ---
+
 ## Project Structure
 
 Standard ROS2 `ament_python` workspace — every package is a direct subfolder of `src/`:
