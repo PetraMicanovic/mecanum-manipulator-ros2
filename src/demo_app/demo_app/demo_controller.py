@@ -93,9 +93,8 @@ PLATFORM_SEQUENCE = [
 
 class DemoController(Node):
     """
-    ROS2 node for mecanum platform control in keyboard, sequence or terminal mode.
-    The active mode is selected via the ROS2 parameter 'mode' at launch time.
-    All modes publish geometry_msgs/Twist on /cmd_vel.
+    ROS2 node for mecanum platform control in keyboard, sequence or terminal mode. The active mode is selected via the ROS2 parameter 'mode' at launch
+    time. All modes publish geometry_msgs/Twist on /cmd_vel.
     """
 
     def __init__(self):
@@ -123,7 +122,7 @@ class DemoController(Node):
             vy: float
                 Lateral (strafe) velocity [m/s].
             wz: float)
-            Yaw rate [rad/s].
+                Yaw rate [rad/s].
         """
         msg = Twist()
         msg.linear.x = vx
@@ -138,7 +137,8 @@ class DemoController(Node):
         self.publish_twist(0.0, 0.0, 0.0)
 
     def _duration_from_value(self, cmd_type, vx, vy, wz, value):
-        """Compute duration from distance [m] or angle [deg].
+        """
+        Compute duration from distance[m] or angle[deg].
 
         Args:
             cmd_type: str
@@ -149,7 +149,7 @@ class DemoController(Node):
                 Distance [m] or angle [deg].
 
         Returns:
-            float: 
+            float:
                 Duration in seconds.
         """
         if cmd_type == "linear":
@@ -195,8 +195,8 @@ class DemoController(Node):
 
     def run_sequence(self):
         """
-        Execute the predefined PLATFORM_SEQUENCE autonomously. Translational steps use distance [m], rotational steps use angle [deg]. Duration is 
-        computed automatically from the distance/angle and the corresponding default velocity.
+        Execute the predefined PLATFORM_SEQUENCE autonomously. Translational steps use distance [m], rotational steps use angle [deg]. Duration is computed
+        automatically from the distance/angle and the corresponding default velocity.
         """
         self.get_logger().info("Running predefined sequence...")
         rate_hz = 10
@@ -291,7 +291,7 @@ class DemoController(Node):
 
 def main(args=None):
     """
-    Entry point for the demo_controller node. Initialises rclpy, spins the node in a background thread and runs the selected control mode in the main 
+    Entry point for the demo_controller node. Initialises rclpy, spins the node in a background thread and runs the selected control mode in the main
     thread.
     """
     rclpy.init(args=args)
