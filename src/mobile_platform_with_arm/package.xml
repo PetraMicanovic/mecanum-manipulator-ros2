@@ -4,7 +4,9 @@
     <name>mobile_platform_with_arm</name>
     <version>0.0.1</version>
     <description>Webots simulation of a mecanum-wheeled mobile platform with the rv3sdb (Mitsubishi
-        Melfa RV-3SDB, 6DOF) arm mounted on top. Arm is driven end-to-end through MoveIt2. Depends on mobile_platform_sim for the mecanum driver/odometry code and on rv3sdb_moveit_config for the arm's MoveIt2 setup.</description>
+        Melfa RV-3SDB, 6DOF) arm mounted on top. Arm is driven end-to-end through MoveIt2. Depends
+        on mobile_platform_sim for the mecanum driver/odometry code and on rv3sdb_moveit_config for
+        the arm's MoveIt2 setup.</description>
     <maintainer email="micanovic.petra@yahoo.com">Petra Micanovic</maintainer>
     <license>MIT</license>
 
@@ -23,6 +25,7 @@
     <!-- Robot and joint state publishers -->
     <exec_depend>robot_state_publisher</exec_depend>
     <exec_depend>joint_state_publisher</exec_depend>
+    <exec_depend>joint-state-publisher-gui</exec_depend>
     <!-- Webots ROS2 driver -->
     <exec_depend>webots_ros2_driver</exec_depend>
     <!-- Navigation -->
@@ -35,7 +38,7 @@
     <exec_depend>joint_trajectory_controller</exec_depend>
     <exec_depend>joint_state_broadcaster</exec_depend>
     <!-- Reuses MecanumRobotDriver + odometry_publisher from the mobile_platform_sim package -->
-    <exec_depend>mobile_platform_sim</exec_depend>    
+    <exec_depend>mobile_platform_sim</exec_depend>
 
     <!-- Python libraries -->
     <exec_depend>python3-numpy</exec_depend>
