@@ -1,0 +1,632 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/RoughConcrete.proto"
+
+WorldInfo {
+  contactProperties [
+    DEF interiorWheelMat ContactProperties {
+      material1 "interiorWheelMat"
+      coulombFriction [
+        0, 2, 0
+      ]
+      frictionRotation -0.785 0
+      bounce 0
+      forceDependentSlip [
+        10, 0
+      ]
+    }
+    DEF exteriorWheelMat ContactProperties {
+      material1 "exteriorWheelMat"
+      coulombFriction [
+        0, 2, 0
+      ]
+      frictionRotation 0.785 0
+      bounce 0
+      forceDependentSlip [
+        10, 0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.15506448961272878 0.14687596976496722 0.9769249989465643 1.624367619392234
+  position -1.0675093567398122 -5.420165511784614 2.41261821095185
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  translation 0.24 0 0
+  floorSize 10 8
+  floorAppearance RoughConcrete {
+  }
+  wallHeight 1
+}
+Robot {
+  translation 0 0 0.1015
+      children [
+        DEF chassis_visual Shape {
+          appearance PBRAppearance {
+            baseColor 0.6 0.6 0.6
+            roughness 0.5
+            metalness 0.4
+          }
+          geometry Mesh {
+            url [
+              "../meshes/chassis.stl"
+            ]
+          }
+    }
+    DEF lidar Lidar {
+      translation 0.4583 0 0.0927
+      children [
+        DEF lidar_visual Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.4 0.2
+            metalness 0.2
+          }
+          geometry Mesh {
+            url [
+              "../meshes/livox_mount.stl"
+            ]
+          }
+        }
+      ]
+      boundingObject Pose {
+        translation -0.032 0 -0.014
+        children [
+          Box {
+            size 0.097 0.064 0.088
+          }
+        ]
+      }
+      physics Physics {
+      }
+      horizontalResolution 360
+      fieldOfView 1.229
+      verticalFieldOfView 1.229
+      numberOfLayers 64
+      minRange 0.05
+      maxRange 20
+    }
+    DEF lidar2 Lidar {
+      translation -0.4583 0 0.0927
+      rotation 0 0 1 3.14159
+      children [
+        DEF lidar2_visual Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.4 0.2
+            metalness 0.2
+          }
+          geometry Mesh {
+            url [
+              "../meshes/livox_mount.stl"
+            ]
+          }
+        }
+      ]
+      name "lidar2"
+      boundingObject Pose {
+        translation -0.032 0 -0.014
+        children [
+          Box {
+            size 0.097 0.064 0.088
+          }
+        ]
+      }
+      physics Physics {
+      }
+      horizontalResolution 360
+      fieldOfView 1.229
+      verticalFieldOfView 1.229
+      numberOfLayers 64
+      minRange 0.05
+      maxRange 20
+    }
+    DEF wheel1 HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor 0.2505 0.26536 0
+      }
+      device [
+        DEF encoder1 PositionSensor {
+          name "encoder1"
+        }
+        DEF motor1 RotationalMotor {
+          name "motor1"
+        }
+      ]
+      endPoint Solid {
+        translation 0.2505 0.26536 0
+        rotation 1 0 0 1.57
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              metalness 0
+            }
+            geometry DEF wheel Cylinder {
+              height 0.077
+              radius 0.1015
+            }
+          }
+        ]
+        contactMaterial "exteriorWheelMat"
+        boundingObject USE wheel
+        physics Physics {
+        }
+      }
+    }
+    DEF wheel2 HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor 0.2505 -0.26536 0
+      }
+      device [
+        DEF encoder2 PositionSensor {
+          name "encoder2"
+        }
+        DEF motor2 RotationalMotor {
+          name "motor2"
+        }
+      ]
+      endPoint Solid {
+        translation 0.2505 -0.26536 0
+        rotation 1 0 0 1.57
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              metalness 0
+            }
+            geometry DEF wheel Cylinder {
+              height 0.077
+              radius 0.1015
+            }
+          }
+        ]
+        name "solid(1)"
+        contactMaterial "interiorWheelMat"
+        boundingObject USE wheel
+        physics Physics {
+        }
+      }
+    }
+    DEF wheel3 HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor -0.2505 0.26536 0
+      }
+      device [
+        DEF encoder3 PositionSensor {
+          name "encoder3"
+        }
+        DEF motor3 RotationalMotor {
+          name "motor3"
+        }
+      ]
+      endPoint Solid {
+        translation -0.2505 0.26536 0
+        rotation 1 0 0 1.57
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              metalness 0
+            }
+            geometry DEF wheel Cylinder {
+              height 0.077
+              radius 0.1015
+            }
+          }
+        ]
+        name "solid(2)"
+        contactMaterial "interiorWheelMat"
+        boundingObject USE wheel
+        physics Physics {
+        }
+      }
+    }
+    DEF wheel4 HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor -0.2505 -0.26536 0
+      }
+      device [
+        DEF encoder4 PositionSensor {
+          name "encoder4"
+        }
+        DEF motor4 RotationalMotor {
+          name "motor4"
+        }
+      ]
+      endPoint Solid {
+        translation -0.2505 -0.26536 0
+        rotation 1 0 0 1.57
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              metalness 0
+            }
+            geometry DEF wheel Cylinder {
+              height 0.077
+              radius 0.1015
+            }
+          }
+        ]
+        name "solid(3)"
+        contactMaterial "exteriorWheelMat"
+        boundingObject USE wheel
+        physics Physics {
+        }
+      }
+    }
+    # =================== rv3sdb ARM (6 DOF) ============================
+    # Mounted centered on top of the chassis.
+    DEF arm_base Solid {
+      translation 0.25 0 0.332
+      children [
+        Pose {
+          rotation 0.577350 0.577350 0.577350 2.094395
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 1 1 1
+                roughness 0.6
+                metalness 0.1
+              }
+              geometry Mesh {
+                url [
+                  "../meshes/arm/base.stl"
+                ]
+              }
+            }
+          ]
+        }
+        DEF joint1 HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 0 1
+            anchor 0 0 0.255
+          }
+          device [
+            DEF joint1_sensor PositionSensor {
+              name "joint1_sensor"
+            }
+            DEF joint1_motor RotationalMotor {
+              name "joint1"
+              minPosition -2.96706
+              maxPosition 2.96706
+              maxVelocity 4.36332
+              maxTorque 50
+            }
+          ]
+          endPoint Solid {
+            translation 0 0 0.255
+            children [
+              Pose {
+                rotation 0.577350 0.577350 0.577350 2.094395
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 1 1 1
+                      roughness 0.6
+                      metalness 0.1
+                    }
+                    geometry Mesh {
+                      url [
+                        "../meshes/arm/shoulder.stl"
+                      ]
+                    }
+                  }
+                ]
+              }
+              DEF joint2 HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 1 0
+                  anchor 0.095 0.108 0.095
+                }
+                device [
+                  DEF joint2_sensor PositionSensor {
+                    name "joint2_sensor"
+                  }
+                  DEF joint2_motor RotationalMotor {
+                    name "joint2"
+                    minPosition -1.5708
+                    maxPosition 2.35619
+                    maxVelocity 3.26377
+                    maxTorque 50
+                  }
+                ]
+                endPoint Solid {
+                  translation 0.095 0.108 0.095
+                  children [
+                    Pose {
+                      rotation 0.577350 0.577350 0.577350 2.094395
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 1 1 1
+                            roughness 0.6
+                            metalness 0.1
+                          }
+                          geometry Mesh {
+                            url [
+                              "../meshes/arm/upper_arm.stl"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                    DEF joint3 HingeJoint {
+                      jointParameters HingeJointParameters {
+                        axis 0 1 0
+                        anchor 0 -0.044 0.245
+                      }
+                      device [
+                        DEF joint3_sensor PositionSensor {
+                          name "joint3_sensor"
+                        }
+                        DEF joint3_motor RotationalMotor {
+                          name "joint3"
+                          minPosition -0.349066
+                          maxPosition 2.98451
+                          maxVelocity 4.36332
+                          maxTorque 50
+                        }
+                      ]
+                      endPoint Solid {
+                        translation 0 -0.044 0.245
+                        rotation 0 -1 0 1.570796
+                        children [
+                          Pose {
+                            rotation 0.577350 0.577350 0.577350 2.094395
+                            children [
+                              Shape {
+                                appearance PBRAppearance {
+                                  baseColor 1 1 1
+                                  roughness 0.6
+                                  metalness 0.1
+                                }
+                                geometry Mesh {
+                                  url [
+                                    "../meshes/arm/elbow.stl"
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                          DEF joint4 HingeJoint {
+                            jointParameters HingeJointParameters {
+                              axis 1 0 0
+                              anchor 0.055 -0.064 0.135
+                            }
+                            device [
+                              DEF joint4_sensor PositionSensor {
+                                name "joint4_sensor"
+                              }
+                              DEF joint4_motor RotationalMotor {
+                                name "joint4"
+                                minPosition -2.79253
+                                maxPosition 2.79253
+                                maxVelocity 7.19076
+                                maxTorque 20
+                              }
+                            ]
+                            endPoint Solid {
+                              translation 0.055 -0.064 0.135
+                              children [
+                                Pose {
+                                  rotation 0.707107 0.707107 0 3.141593
+                                  children [
+                                    Shape {
+                                      appearance PBRAppearance {
+                                        baseColor 1 1 1
+                                        roughness 0.6
+                                        metalness 0.1
+                                      }
+                                      geometry Mesh {
+                                        url [
+                                          "../meshes/arm/fore_arm.stl"
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                                DEF joint5 HingeJoint {
+                                  jointParameters HingeJointParameters {
+                                    axis 0 1 0
+                                    anchor 0.215 0.037 0
+                                  }
+                                  device [
+                                    DEF joint5_sensor PositionSensor {
+                                      name "joint5_sensor"
+                                    }
+                                    DEF joint5_motor RotationalMotor {
+                                      name "joint5"
+                                      minPosition -2.0944
+                                      maxPosition 2.0944
+                                      maxVelocity 7.19076
+                                      maxTorque 20
+                                    }
+                                  ]
+                                  endPoint Solid {
+                                    translation 0.215 0.037 0
+                                    children [
+                                      Pose {
+                                        rotation 0.707107 0.707107 0 3.141593
+                                        children [
+                                          Shape {
+                                            appearance PBRAppearance {
+                                              baseColor 1 1 1
+                                              roughness 0.6
+                                              metalness 0.1
+                                            }
+                                            geometry Mesh {
+                                              url [
+                                                "../meshes/arm/wrist.stl"
+                                              ]
+                                            }
+                                          }
+                                        ]
+                                      }
+                                      DEF joint6 HingeJoint {
+                                        jointParameters HingeJointParameters {
+                                          axis 1 0 0
+                                          anchor 0.062 -0.037 0
+                                        }
+                                        device [
+                                          DEF joint6_sensor PositionSensor {
+                                            name "joint6_sensor"
+                                          }
+                                          DEF joint6_motor RotationalMotor {
+                                            name "joint6"
+                                            minPosition -6.28319
+                                            maxPosition 6.28319
+                                            maxVelocity 11.5192
+                                            maxTorque 10
+                                          }
+                                        ]
+                                        endPoint Solid {
+                                          translation 0.062 -0.037 0
+                                          children [
+                                            Pose {
+                                              rotation 0.707107 0.707107 0 3.141593
+                                              children [
+                                                Shape {
+                                                  appearance PBRAppearance {
+                                                    baseColor 1 1 1
+                                                    roughness 0.6
+                                                    metalness 0.1
+                                                  }
+                                                  geometry Mesh {
+                                                    url [
+                                                      "../meshes/arm/mounting_interface.stl"
+                                                    ]
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                          name "link6"
+                                          boundingObject Pose {
+                                            rotation 0.707107 0.707107 0 3.141593
+                                            translation 0 0.0115 0
+                                            children [
+                                              Box {
+                                                size 0.07 0.023 0.07
+                                              }
+                                            ]
+                                          }
+                                          physics Physics {
+                                          }
+                                        }
+                                      }
+                                    ]
+                                    name "link5"
+                                    boundingObject Pose {
+                                      rotation 0.707107 0.707107 0 3.141593
+                                      translation -0.0328 -0.0107 -0.0028
+                                      children [
+                                        Box {
+                                          size 0.0785 0.1455 0.1065
+                                        }
+                                      ]
+                                    }
+                                    physics Physics {
+                                    }
+                                  }
+                                }
+                              ]
+                              name "link4"
+                              boundingObject Pose {
+                                rotation 0.707107 0.707107 0 3.141593
+                                translation 0.0035 0.125 0.0095
+                                children [
+                                  Box {
+                                    size 0.146 0.274 0.139
+                                  }
+                                ]
+                              }
+                              physics Physics {
+                              }
+                            }
+                          }
+                        ]
+                        name "link3"
+                        boundingObject Pose {
+                          rotation 0.577350 0.577350 0.577350 2.094395
+                          translation -0.086 0.059 -0.0181
+                          children [
+                            Box {
+                              size 0.164 0.276 0.2039
+                            }
+                          ]
+                        }
+                        physics Physics {
+                        }
+                      }
+                    }
+                  ]
+                  name "link2"
+                  boundingObject Pose {
+                    rotation 0.577350 0.577350 0.577350 2.094395
+                    translation -0.0177 0.1149 0
+                    children [
+                      Box {
+                        size 0.0595 0.4178 0.188
+                      }
+                    ]
+                  }
+                  physics Physics {
+                  }
+                }
+              }
+            ]
+            name "link1"
+            boundingObject Pose {
+              rotation 0.577350 0.577350 0.577350 2.094395
+              translation -0.01 0.0882 0.0281
+              children [
+                Box {
+                  size 0.24 0.2014 0.3218
+                }
+              ]
+            }
+            physics Physics {
+            }
+          }
+        }
+      ]
+      name "arm_base"
+      boundingObject Pose {
+        rotation 0.577350 0.577350 0.577350 2.094395
+        translation 0 0.1208 0.009
+        children [
+          Box {
+            size 0.262 0.2415 0.244
+          }
+        ]
+      }
+      physics Physics {
+      }
+    }
+  ]
+  # Bounding box: mesh dimensions 0.9 x 0.54 x 0.456
+  # Center Z = mesh_center_Z - mesh_offset = 0.181 - 0.047 = 0.134
+  boundingObject Pose {
+    translation 0 0 0.134
+    children [
+      Box {
+        size 0.9 0.54 0.456
+      }
+    ]
+  }
+  physics Physics {
+  }
+  controller "<extern>"
+}
