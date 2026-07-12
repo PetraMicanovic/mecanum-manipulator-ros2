@@ -1,7 +1,7 @@
 from glob import glob
 from setuptools import find_packages, setup
 
-package_name = "mobile_platform_with arm"
+package_name = "mobile_platform_with_arm"
 
 data_files = []
 data_files.append(
