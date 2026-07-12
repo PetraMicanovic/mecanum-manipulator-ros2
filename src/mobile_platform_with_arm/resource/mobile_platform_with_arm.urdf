@@ -340,10 +340,50 @@ TF tree:
         <child link="tool_link" />
     </joint>
 
-    <!-- ============================ WEBOTS / ROS2 PLUGINS ============================ -->
+    <!-- ========================= ros2_control (arm only) ============================ -->
+    <!-- Only the 6 arm joints are exposed here for MoveIt2 / joint_trajectory_controller. -->
+    <ros2_control name="ArmWebotsControl" type="system">
+        <hardware>
+            <plugin>webots_ros2_control::Ros2ControlSystem</plugin>
+        </hardware>
+        <joint name="joint1">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+        <joint name="joint2">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+        <joint name="joint3">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+        <joint name="joint4">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+        <joint name="joint5">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+        <joint name="joint6">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+    </ros2_control>
+
+    <!-- ======================== WEBOTS / ROS2 PLUGINS ============================ -->
     <webots>
         <!-- Custom mecanum kinematics controller (unchanged, wheels only) -->
         <plugin type="mobile_platform_sim.mecanum_robot_driver.MecanumRobotDriver" />
+        <!-- ros2_control bridge for the arm joints -->
+        <plugin type="webots_ros2_control::Ros2Control" />
         <device reference="lidar" type="Lidar">
             <ros>
                 <enabled>true</enabled>
