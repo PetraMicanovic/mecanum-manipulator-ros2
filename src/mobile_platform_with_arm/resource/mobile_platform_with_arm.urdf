@@ -288,7 +288,7 @@ TF tree:
 
     <!-- Mount the arm on top of the chassis. -->
     <joint name="arm_mounting_joint" type="fixed">
-        <origin rpy="0 0 0" xyz="0.25 0 0.332" />
+        <origin rpy="0 0 0" xyz="0.25 0 0.325" />
         <parent link="base_link" />
         <child link="link0" />
     </joint>
