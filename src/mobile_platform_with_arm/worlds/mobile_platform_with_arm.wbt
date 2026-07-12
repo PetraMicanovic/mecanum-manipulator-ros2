@@ -17,6 +17,7 @@ WorldInfo {
       forceDependentSlip [
         10, 0
       ]
+      softCFM 0.0001
     }
     DEF exteriorWheelMat ContactProperties {
       material1 "exteriorWheelMat"
@@ -28,6 +29,7 @@ WorldInfo {
       forceDependentSlip [
         10, 0
       ]
+      softCFM 0.0001
     }
   ]
 }
@@ -48,18 +50,19 @@ RectangleArena {
 }
 Robot {
   translation 0 0 0.1015
-      children [
-        DEF chassis_visual Shape {
-          appearance PBRAppearance {
-            baseColor 0.6 0.6 0.6
-            roughness 0.5
-            metalness 0.4
-          }
-          geometry Mesh {
-            url [
-              "../meshes/chassis.stl"
-            ]
-          }
+  name "mobile_platform_with_arm"
+  children [
+    DEF chassis_visual Shape {
+      appearance PBRAppearance {
+        baseColor 0.6 0.6 0.6
+        roughness 0.5
+        metalness 0.4
+      }
+      geometry Mesh {
+        url [
+          "../meshes/chassis.stl"
+        ]
+      }
     }
     DEF lidar Lidar {
       translation 0.4583 0 0.0927
@@ -267,9 +270,8 @@ Robot {
       }
     }
     # =================== rv3sdb ARM (6 DOF) ============================
-    # Mounted centered on top of the chassis.
     DEF arm_base Solid {
-      translation 0.25 0 0.332
+      translation 0.25 0 0.325
       children [
         Pose {
           rotation 0.577350 0.577350 0.577350 2.094395
@@ -616,10 +618,8 @@ Robot {
       }
     }
   ]
-  # Bounding box: mesh dimensions 0.9 x 0.54 x 0.456
-  # Center Z = mesh_center_Z - mesh_offset = 0.181 - 0.047 = 0.134
   boundingObject Pose {
-    translation 0 0 0.134
+    translation -0.0185 0 0.186
     children [
       Box {
         size 0.9 0.54 0.456
