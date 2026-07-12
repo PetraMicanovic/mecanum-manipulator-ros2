@@ -32,11 +32,12 @@
     <exec_depend>nav2_bringup</exec_depend>
     <exec_depend>navigation2</exec_depend>
     <exec_depend>slam_toolbox</exec_depend>
-    <!-- rv3sdb arm: ros2_control bridge -->
+    <!-- rv3sdb arm: ros2_control bridge + MoveIt2 -->
     <exec_depend>webots_ros2_control</exec_depend>
     <exec_depend>controller_manager</exec_depend>
     <exec_depend>joint_trajectory_controller</exec_depend>
     <exec_depend>joint_state_broadcaster</exec_depend>
+    <exec_depend>rv3sdb_moveit_config</exec_depend>
     <!-- Reuses MecanumRobotDriver + odometry_publisher from the mobile_platform_sim package -->
     <exec_depend>mobile_platform_sim</exec_depend>
 
