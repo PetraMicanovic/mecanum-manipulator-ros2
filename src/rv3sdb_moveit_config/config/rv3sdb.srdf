@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<robot name="rv3sdb">
+    <!-- Ported unchanged from the original ROS1 rv3sdb_moveit_config: the arm's link/joint names
+         (link0..link6, tool_link, joint1..joint6, tcp) are identical in
+         mobile_platform_with_arm.urdf, only the arm's parent link changed
+         (from a free-standing base_link to the mobile platform's base_link). -->
+    <group name="arm">
+        <joint name="joint1" />
+        <joint name="joint2" />
+        <joint name="joint3" />
+        <joint name="joint4" />
+        <joint name="joint5" />
+        <joint name="joint6" />
+        <joint name="tcp" />
+    </group>
+    <group_state name="zero_pose" group="arm">
+        <joint name="joint1" value="0" />
+        <joint name="joint2" value="0" />
+        <joint name="joint3" value="0" />
+        <joint name="joint4" value="0" />
+        <joint name="joint5" value="0" />
+        <joint name="joint6" value="0" />
+    </group_state>
+
+    <group_state name="capture_pose1" group="arm">
+        <joint name="joint1" value="0" />
+        <joint name="joint2" value="-0.6108652381980153" />
+        <joint name="joint3" value="2.7576202181510405" />
+        <joint name="joint4" value="0" />
+        <joint name="joint5" value="0.0" />
+        <joint name="joint6" value="0" />
+    </group_state>
+
+    <group_state name="capture_pose2" group="arm">
+        <joint name="joint1" value="0" />
+        <joint name="joint2" value="-0.8203047484373349" />
+        <joint name="joint3" value="2.8797932657906435" />
+        <joint name="joint4" value="0" />
+        <joint name="joint5" value="0.0" />
+        <joint name="joint6" value="0" />
+    </group_state>
+
+    <!-- Disable collisions between the arm's own adjacent/never-colliding link pairs, same as
+         the ROS1 config. NOTE: this does NOT yet disable collisions between the arm and the
+         platform's chassis/lidars.
+    -->
+    <disable_collisions link1="link0" link2="link1" reason="Adjacent" />
+    <disable_collisions link1="link1" link2="link2" reason="Adjacent" />
+    <disable_collisions link1="link1" link2="link3" reason="Never" />
+    <disable_collisions link1="link2" link2="link3" reason="Adjacent" />
+    <disable_collisions link1="link3" link2="link4" reason="Adjacent" />
+    <disable_collisions link1="link3" link2="link5" reason="Never" />
+    <disable_collisions link1="link3" link2="link6" reason="Never" />
+    <disable_collisions link1="link4" link2="link5" reason="Adjacent" />
+    <disable_collisions link1="link5" link2="link6" reason="Adjacent" />
+    <disable_collisions link1="link6" link2="tool_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="link0" reason="Adjacent" />
+</robot>
