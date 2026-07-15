@@ -23,7 +23,33 @@ from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from moveit_configs_utils import MoveItConfigsBuilder
 
+def _build_moveit_config():
+    """
+    Assemble the MoveIt2 config object for the rv3sdb arm.
+
+    Keep in sync with moveit_rviz.launch.py's build_moveit_config(). This is a duplicate.
+
+    Returns:
+        moveit_configs_utils.MoveItConfigs:
+            MoveIt configuration containing robot_description, SRDF, kinematics, joint limits and trajectory execution settings.
+    """
+    platform_share = get_package_share_directory("mobile_platform_with_arm")
+    urdf_path = os.path.join(platform_share, "resource", "mobile_platform_with_arm.urdf")
+    return (
+        MoveItConfigsBuilder("rv3sdb", package_name="rv3sdb_moveit_config")
+        .robot_description(file_path=urdf_path)
+        .robot_description_semantic(file_path="config/rv3sdb.srdf")
+        .robot_description_kinematics(file_path="config/kinematics.yaml")
+        .joint_limits(file_path="config/joint_limits.yaml")
+        .trajectory_execution(file_path="config/moveit_controllers.yaml")
+        .planning_pipelines(pipelines=["ompl"], default_planning_pipeline="ompl")
+        .planning_scene_monitor(
+            publish_robot_description=True, publish_robot_description_semantic=True
+        )
+        .to_moveit_configs()
+    )
 
 def generate_launch_description():
     """
@@ -95,13 +121,20 @@ def generate_launch_description():
         output="screen",
     )
 
-    # Bare rviz2 with no MoveIt2 parameters. It is good for a quick look at TF/topics, but has no robot model or MotionPlanning display.
-    # For actual arm planning, use moveit_rviz.launch.py alongside this file.
+    moveit_config = _build_moveit_config()
+
     rviz2 = Node(
         package="rviz2",
         executable="rviz2",
         output="screen",
         condition=launch.conditions.IfCondition(use_rviz),
+        parameters=[
+            moveit_config.robot_description,
+            moveit_config.robot_description_semantic,
+            moveit_config.robot_description_kinematics,
+            moveit_config.planning_pipelines,
+            moveit_config.joint_limits,
+        ],
     )
 
     # Static transform: base_footprint -> base_link (unchanged)
