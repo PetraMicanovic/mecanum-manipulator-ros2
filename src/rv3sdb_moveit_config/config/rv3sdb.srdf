@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<robot name="rv3sdb">
+<robot name="mobile_platform_with_arm">
     <!-- Ported unchanged from the original ROS1 rv3sdb_moveit_config: the arm's link/joint names
          (link0..link6, tool_link, joint1..joint6, tcp) are identical in
          mobile_platform_with_arm.urdf, only the arm's parent link changed
