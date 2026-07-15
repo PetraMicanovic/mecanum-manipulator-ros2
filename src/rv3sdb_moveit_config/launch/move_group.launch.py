@@ -1,7 +1,7 @@
 """
-Starts the MoveIt2 move_group node for the rv3sdb arm mounted on the mecanum platform. 
+Starts the MoveIt2 move_group node for the rv3sdb arm mounted on the mecanum platform.
 This launch file does not start robot_state_publisher or any controller_manager, as they are already started by mobile_platform_with_arm_launch.py.
-Instead, it builds move_group's own robot_description and robot_description_semantic parameters from 
+Instead, it builds move_group's own robot_description and robot_description_semantic parameters from
 the same URDF/SRDF so that planning and execution stay in sync.
 """
 
@@ -24,7 +24,7 @@ def build_moveit_config():
         moveit_configs_utils.MoveItConfigs:
             MoveIt configuration object.
     """
-    platform_share = get_package_share_directory("mobile_platform_sim")
+    platform_share = get_package_share_directory("mobile_platform_with_arm")
     urdf_path = os.path.join(
         platform_share, "resource", "mobile_platform_with_arm.urdf"
     )
@@ -36,6 +36,7 @@ def build_moveit_config():
         .robot_description_kinematics(file_path="config/kinematics.yaml")
         .joint_limits(file_path="config/joint_limits.yaml")
         .trajectory_execution(file_path="config/moveit_controllers.yaml")
+        .planning_pipelines(pipelines=["ompl"], default_planning_pipeline="ompl")
         .planning_scene_monitor(
             publish_robot_description=True, publish_robot_description_semantic=True
         )
