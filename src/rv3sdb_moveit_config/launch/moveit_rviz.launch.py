@@ -1,15 +1,15 @@
 """
-Launches move_group together with RViz2.
+Launches RViz2 configured for MoveIt2 motion planning.
 
-This file does not start simulation itself. It only adds the MoveIt2 planning node and an RViz instance for motion planning.
+This file does not start simulation and its own move_group. It assumes mobile_platform_with_arm_launch.py (with moveit:=true) is already running and has
+its own move_group node up. This file only builds the same MoveIt2 config (so RViz's MotionPlanning display has robot_description/SRDF/kinematics/etc. to
+show) and starts RViz2 alone.
 """
 
 import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, TimerAction
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from moveit_configs_utils import MoveItConfigsBuilder
 
@@ -24,7 +24,7 @@ def _build_moveit_config():
         moveit_configs_utils.MoveItConfigs:
             MoveIt configuration containing robot_description, SRDF, kinematics, joint limits and trajectory execution settings.
     """
-    platform_share = get_package_share_directory("mobile_platform_sim")
+    platform_share = get_package_share_directory("mobile_platform_with_arm")
     urdf_path = os.path.join(
         platform_share, "resource", "mobile_platform_with_arm.urdf"
     )
@@ -35,6 +35,7 @@ def _build_moveit_config():
         .robot_description_kinematics(file_path="config/kinematics.yaml")
         .joint_limits(file_path="config/joint_limits.yaml")
         .trajectory_execution(file_path="config/moveit_controllers.yaml")
+        .planning_pipelines(pipelines=["ompl"], default_planning_pipeline="ompl")
         .planning_scene_monitor(
             publish_robot_description=True, publish_robot_description_semantic=True
         )
@@ -46,26 +47,15 @@ def generate_launch_description():
     """
     Build the launch description for this file.
 
-    Includes move_group.launch.py from rv3sdb_moveit_config and starts plain RViz2 instance a few seconds later.
+    Starts a plain RViz2 instance parameterized with the MoveIt2 config, so the MotionPlanning display can talk to the move_group that's already running 
+    from mobile_platform_with_arm_launch.py.
 
     Returns:
         launch.LaunchDescription:
-            Launches move_group immediately and RViz after a short delay
+            Launches RViz2 alone.
     """
     moveit_config = _build_moveit_config()
 
-    move_group_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("rv3sdb_moveit_config"),
-                "launch",
-                "move_group.launch.py",
-            )
-        )
-    )
-
-    # NOTE: the original ROS1 package shipped a moveit.rviz config, but rviz2's config format isn't compatible with it, so we start plain rviz2 here. 
-    # Add the "MotionPlanning" display (fixed frame: base_link, planning group: arm) once, then File > Save Config As to keep it.
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
@@ -79,7 +69,4 @@ def generate_launch_description():
         ],
     )
 
-    # Give move_group a couple seconds' head start before RViz tries to query it.
-    delayed_rviz = TimerAction(period=3.0, actions=[rviz_node])
-
-    return LaunchDescription([move_group_launch, delayed_rviz])
+    return LaunchDescription([rviz_node])
