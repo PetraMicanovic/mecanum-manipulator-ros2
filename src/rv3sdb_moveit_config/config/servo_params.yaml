@@ -1,0 +1,53 @@
+# moveit_servo configuration for the rv3sdb arm.
+#
+# Configuration based on the MoveIt2 Jazzy Servo tutorials.
+
+moveit_servo:
+  use_gazebo: false
+
+  # Properties of incoming commands
+  command_in_type: "unitless"  # values in [-1:1], like a joystick, scaled below
+  scale:
+    linear: 0.4   # max linear velocity [m/s] for Cartesian commands
+    rotational: 0.8   # max angular velocity [rad/s] for Cartesian commands
+    joint: 0.5   # max joint velocity for direct joint jog commands
+
+  # Properties of outgoing commands
+  publish_period: 0.034   # ~30 Hz outgoing command rate
+  low_pass_filter_coeff: 2.0  # higher = trust filtered data more, raw measurements less
+
+  # What the arm_controller (joint_trajectory_controller) expects
+  command_out_type: trajectory_msgs/JointTrajectory
+  publish_joint_positions: true
+  publish_joint_velocities: true
+  publish_joint_accelerations: false
+  low_latency_mode: false
+
+  # Frames
+  planning_frame: base_link
+  ee_frame: tool_link
+  robot_link_command_frame: base_link
+
+  # Command input topics (relative to the servo node's own namespace, e.g. /servo_node/...)
+  cartesian_command_in_topic: ~/delta_twist_cmds
+  joint_command_in_topic: ~/delta_joint_cmds
+
+  # Command output -- same controller move_group already uses
+  command_out_topic: /arm_controller/joint_trajectory
+
+  # Feedback
+  joint_topic: /joint_states
+  status_topic: ~/status
+
+  # Planning group (matches rv3sdb.srdf)
+  move_group_name: arm
+
+  # Safety / timeouts
+  incoming_command_timeout: 0.1
+  num_outgoing_halt_msgs_to_publish: 4
+  joint_limit_margins: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+
+  # Singularity handling
+  lower_singularity_threshold: 17.0
+  hard_stop_singularity_threshold: 30.0
+  leaving_singularity_threshold_multiplier: 2.0
