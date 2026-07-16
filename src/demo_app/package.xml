@@ -3,9 +3,10 @@
 <package format="3">
   <name>demo_app</name>
   <version>0.0.1</version>
-  <description>Demo application for the mecanum-wheeled mobile platform.
-  Supports three control modes: terminal (typed commands), sequence (autonomous),
-  and keyboard (WASD single-key control). </description>
+  <description>Demo application for the mecanum-wheeled mobile platform and rv3sdb robotic arm.
+    Supports three control modes for the mobile platform: terminal (typed commands), sequence
+    (autonomous), and keyboard (WASD single-key control). Also includes a ROS2 node for a real-time
+    keyboard jogging of the rv3sdb arm via moveit?_servo.</description>
   <maintainer email="micanovic.petra@yahoo.com">Petra Micanovic</maintainer>
   <license>MIT</license>
 
@@ -14,6 +15,7 @@
   <exec_depend>rclpy</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>moveit_servo</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
