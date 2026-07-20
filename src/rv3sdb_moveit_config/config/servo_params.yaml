@@ -43,6 +43,6 @@ servo_node:
       num_outgoing_halt_msgs_to_publish: 4
       joint_limit_margins: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
       # Singularity handling
-      lower_singularity_threshold: 17.0
-      hard_stop_singularity_threshold: 30.0
+      lower_singularity_threshold: 60.0
+      hard_stop_singularity_threshold: 300.0
       leaving_singularity_threshold_multiplier: 2.0
