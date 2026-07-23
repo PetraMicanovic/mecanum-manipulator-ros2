@@ -23,6 +23,7 @@ setup(
         "console_scripts": [
             "demo_controller = demo_app.demo_controller:main",
             "arm_servo_keyboard = demo_app.arm_servo_keyboard:main",
+            "plan_named_pose = demo_app.plan_named_pose:main"
         ],
     },
 )
