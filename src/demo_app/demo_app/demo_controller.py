@@ -193,15 +193,37 @@ class DemoController(Node):
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
             self.stop()
 
-    def run_sequence(self):
+    def run_sequence(self, sequence=None):
         """
-        Execute the predefined PLATFORM_SEQUENCE autonomously. Translational steps use distance [m], rotational steps use angle [deg]. Duration is computed
-        automatically from the distance/angle and the corresponding default velocity.
+        Execute a sequence of movement steps autonomously. Defaults to the module-level
+        PLATFORM_SEQUENCE if no custom sequence is given. Translational steps use distance [m], 
+        rotational steps use angle [deg].
+
+        Args:
+        sequence: list[tuple] or None
+            List of movement steps to execute, where each step is a tuple:
+            (cmd_type, vx, vy, wz, value)
+                cmd_type: str
+                    'linear' or 'angular'.
+                vx, vy: float
+                    Linear velocity components [m/s] (used when cmd_type == 'linear').
+                wz: float
+                    Angular velocity [rad/s] (used when cmd_type == 'angular').
+                value: float
+                    Distance [m] for 'linear' steps or angle [deg] for 'angular' steps.
+            If None, the module-level PLATFORM_SEQUENCE is used instead.
+        
+        Returns:
+            None
         """
+        if sequence is not None:
+            sequence = sequence
+        else:
+            sequence = PLATFORM_SEQUENCE
         self.get_logger().info("Running predefined sequence...")
         rate_hz = 10
 
-        for step in PLATFORM_SEQUENCE:
+        for step in sequence:
             if not rclpy.ok():
                 break
 
