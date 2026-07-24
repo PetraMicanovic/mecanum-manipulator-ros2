@@ -196,7 +196,7 @@ class MecanumPlatformController(Node):
     def run_sequence(self, sequence=None):
         """
         Execute a sequence of movement steps autonomously. Defaults to the module-level
-        PLATFORM_SEQUENCE if no custom sequence is given. Translational steps use distance [m], 
+        PLATFORM_SEQUENCE if no custom sequence is given. Translational steps use distance [m],
         rotational steps use angle [deg].
 
         Args:
@@ -212,7 +212,7 @@ class MecanumPlatformController(Node):
                 value: float
                     Distance [m] for 'linear' steps or angle [deg] for 'angular' steps.
             If None, the module-level PLATFORM_SEQUENCE is used instead.
-        
+
         Returns:
             None
         """
@@ -335,8 +335,9 @@ def main(args=None):
             )
     finally:
         node.stop()
-        node.destroy_node()
         rclpy.shutdown()
+        spin_thread.join()
+        node.destroy_node()
 
 
 if __name__ == "__main__":
