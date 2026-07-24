@@ -1,15 +1,15 @@
 """
-Starts the MoveIt2 move_group node for the rv3sdb arm mounted on the mecanum platform.
-This launch file does not start robot_state_publisher or any controller_manager, as they are already started by mobile_platform_with_arm_launch.py.
-Instead, it builds move_group's own robot_description and robot_description_semantic parameters from
-the same URDF/SRDF so that planning and execution stay in sync.
+Starts the MoveIt2 move_group node for the rv3sdb arm mounted on the mecanum platform. This launch file does
+not start robot_state_publisher or any controller_manager, as they are already started by 
+mobile_platform_with_arm_launch.py. Instead, it builds move_group's own robot_description and 
+robot_description_semantic parameters from the same URDF/SRDF so that planning and execution stay in sync.
 
 Usage:
     ros2 launch rv3sdb_moveit_config move_group.launch.py
 
-Not intended to be launched standalone. Run mobile_platform_with_arm's launch file
-first (or alongside), since it provides robot_state_publisher, the arm's controller_manager
-and TF, which this file assumes are already running.
+Not intended to be launched standalone. Run mobile_platform_with_arm's launch file first (or alongside), 
+since it provides robot_state_publisher, the arm's controller_manager and TF, which this file assumes are
+already running.
 """
 
 import os
@@ -24,8 +24,8 @@ def build_moveit_config():
     """
     Build the full MoveIt2 configuration object for the rv3sdb arm.
 
-    This function locates the combined robot URDF and combines it with the rv3sdb SRDF, kinematics, joint limits and controller mapping to construct a
-    MoveItConfigs object.
+    This function locates the combined robot URDF and combines it with the rv3sdb SRDF, kinematics, joint limits
+    and controller mapping to construct a MoveItConfigs object.
 
     Returns:
         moveit_configs_utils.MoveItConfigs:
@@ -57,7 +57,8 @@ def generate_launch_description():
 
     Returns:
         launch.LaunchDescription
-            A launch description containing the move_group Node configured with the MoveIt parameters built by build_moveit_config().
+            A launch description containing the move_group Node configured with the MoveIt parameters built by
+            build_moveit_config().
     """
     moveit_config = build_moveit_config()
 

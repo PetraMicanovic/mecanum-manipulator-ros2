@@ -1,5 +1,5 @@
 """
-Shared MoveIt2 configuration builders for moveit_py-based scripts in demo_app.
+Shared MoveIt2 configuration builders for moveit_py-based scripts in mecanum_manipulator_control.
 """
 
 import os
@@ -9,10 +9,10 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 def build_moveit_config():
     """
-    Build the MoveIt2 configuration shared by all moveit_py scripts in demo_app.
+    Build the MoveIt2 configuration shared by all moveit_py scripts in mecanum_manipulator_control.
 
-    Using the same configuration as move_group.launch.py ensures every script plans
-    against the same robot description, SRDF, kinematics and planning pipeline.
+    Using the same configuration as move_group.launch.py ensures every script plans against the same
+    robot description, SRDF, kinematics and planning pipeline.
 
     Returns:
         moveit_configs_utils.MoveItConfigs:

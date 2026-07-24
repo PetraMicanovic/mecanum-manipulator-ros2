@@ -1,13 +1,15 @@
 """
-ROS2 launch file for the mecanum platform with the rv3sdb arm in Webots. Arm is driven end-to-end
-through MoveIt2, with an additional moveit_servo servo_node for real-time Cartesian jogging.
-The wheel/lidar side (MecanumRobotDriver, wheel odometry, footprint TF) reuses code from mobile_platform_sim unchanged. This file loads
-mobile_platform_with_arm.urdf, launches platform_with_arm.wbt, webots_ros2_control exposes for the arm's 6 joints and includes rv3sdb_moveit_config's
-move_group.launch.py so MoveIt2 can plan/execute against the arm. It also starts moveit_servo's servo_node so the arm can be jogged in real time
-(e.g. via demo_app's arm_servo_keyboard node) alongside move_group's plan-and-execute pipeline.
-Wheel joint states (from /wheels_encoders) and arm joint states (from joint_state_broadcaster) are merged into a single /joint_states topic by
-joint_state_publisher's source_list, since robot_state_publisher needs exactly one combined feed to build the whole TF tree (chassis + arm).
-The arm's ros2_control node is remapped so its own "joint_states" topic doesn't collide with that final merged one.
+ROS2 launch file for the mecanum platform with the rv3sdb arm in Webots. Arm is driven end-to-end through
+MoveIt2, with an additional moveit_servo servo_node for real-time Cartesian jogging. The wheel/lidar side
+(MecanumRobotDriver, wheel odometry, footprint TF) reuses code from mobile_platform_sim unchanged. This 
+file loads mobile_platform_with_arm.urdf, launches mobile_platform_with_arm.wbt, webots_ros2_control exposes
+for the arm's 6 joints and includes rv3sdb_moveit_config's move_group.launch.py so MoveIt2 can plan/execute 
+against the arm. It also starts moveit_servo's servo_node so the arm be jogged in real time (e.g. via 
+mecanum_manipulator_control's arm_servo_keyboard node) alongside move_group's plan-and-execute pipeline. Wheel
+joint states (from /wheels_encoders) and arm joint states (from joint_state_broadcaster) are merged into a 
+single /joint_states topic by joint_state_publisher's source_list, since robot_state_publisher needs exactly 
+one combined feed to build the whole TF tree (chassis + arm). The arm's ros2_control node is remapped so its 
+own "joint_states" topic doesn't collide with that final merged one.
 
 Usage:
     ros2 launch mobile_platform_with_arm mobile_platform_with_arm.launch.py
@@ -16,13 +18,16 @@ Usage:
     ros2 launch mobile_platform_with_arm mobile_platform_with_arm.launch.py moveit:=false servo:=false
 
 Launch arguments:
-    rviz: bool (default: false)
+    rviz: bool 
         Start a plain rviz2 instance alongside the simulation.
-    moveit: bool (default: true)
+        default: false
+    moveit: bool
         Include rv3sdb_moveit_config's move_group.launch.py so the arm can be planned through MoveIt2.
-    servo: bool (default: true)
+        default: true
+    servo: bool 
         Start moveit_servo's servo_node so the arm can be jogged in real time (e.g. via
-        demo_app's arm_servo_keyboard node), alongside move_group's plan-and-execute pipeline.
+        mecanum_manipulator_control's arm_servo_keyboard node), alongside move_group's plan-and-execute pipeline.
+        default: true
 """
 
 import os
@@ -49,7 +54,8 @@ def _build_moveit_config():
 
     Returns:
         moveit_configs_utils.MoveItConfigs:
-            MoveIt configuration containing robot_description, SRDF, kinematics, joint limits and trajectory execution settings.
+            MoveIt configuration containing robot_description, SRDF, kinematics, joint limits and trajectory 
+            execution settings.
     """
     platform_share = get_package_share_directory("mobile_platform_with_arm")
     urdf_path = os.path.join(
@@ -74,8 +80,9 @@ def generate_launch_description():
     """
     Build the launch description for the full platform and arm simulation.
 
-    Starts Webots with the platform_with_arm world, brings up both drivers (mecanum wheels and the arm's ros2_control), spawns the joint_state_broadcaster
-    and arm controller and merges wheel and arm joint states into a single /joint_states feed for robot_state_publisher.
+    Starts Webots with the mobile_platform_with_arm world, brings up both drivers (mecanum wheels and the arm's 
+    ros2_control), spawns the joint_state_broadcaster and arm controller and merges wheel and arm joint states 
+    into a single /joint_states feed for robot_state_publisher.
 
     Launch arguments:
         rviz: bool
@@ -83,13 +90,13 @@ def generate_launch_description():
         moveit: bool
             Include rv3sdb_moveit_config's move_group.launch.py so the arm can be planned through MoveIt2. Default True
         servo: bool
-            Start moveit_servo's servo_node so the arm can be jogged in real time (e.g. via demo_app's arm_servo_keyboard
-            node), alongside move_group's plan-and-execute pipeline. Default True
+            Start moveit_servo's servo_node so the arm can be jogged in real time (e.g. via mecanum_manipulator_control's
+            arm_servo_keyboard node), alongside move_group's plan-and-execute pipeline. Default True
 
     Returns:
         launch.LaunchDescription
-            Webots, both robot description publishers, the joint state merger and controller group(spawners, move_group, servo_node, rviz)
-            wrapped in WaitForControllerConnection
+            Webots, both robot description publishers, the joint state merger and controller group(spawners, move_group, 
+            servo_node, rviz) wrapped in WaitForControllerConnection
     """
     use_rviz = LaunchConfiguration("rviz")
     use_moveit = LaunchConfiguration("moveit")
@@ -123,16 +130,16 @@ def generate_launch_description():
         output="screen",
     )
 
-    # Single WebotsController for the "mobile_platform" robot. Its URDF <webots> block declares 2 plugins: MecanumRobotDriver (wheels, unchanged) and
-    # webots_ros2_control::Ros2Control(arm).
+    # Single WebotsController for the "mobile_platform" robot. Its URDF <webots> block declares 2 plugins: MecanumRobotDriver 
+    # (wheels, unchanged) and webots_ros2_control::Ros2Control(arm).
     platform_driver = WebotsController(
         robot_name="mobile_platform_with_arm",
         parameters=[
             {"robot_description": platform_description_path},
             controllers_yaml_path,
         ],
-        # ros2_control_node's own "joint_states" gets remapped here so it doesn't collide with the merged /joint_states that joint_state_publisher
-        # produces below.
+        # ros2_control_node's own "joint_states" gets remapped here so it doesn't collide with the merged /joint_states that 
+        # joint_state_publisher produces below.
         remappings=[("/joint_states", "/arm/joint_states")],
     )
 
@@ -183,7 +190,8 @@ def generate_launch_description():
         arguments=[platform_description_path],
     )
 
-    # Merges wheel encoder joint states and the arm's joint_state_broadcaster output into one /joint_states feed for robot_state_publisher.
+    # Merges wheel encoder joint states and the arm's joint_state_broadcaster output into one /joint_states feed for 
+    # robot_state_publisher.
     joint_state_publisher = Node(
         package="joint_state_publisher",
         executable="joint_state_publisher",
@@ -209,8 +217,9 @@ def generate_launch_description():
         condition=launch.conditions.IfCondition(use_moveit),
     )
 
-    # moveit_servo's servo_node: streams /servo_node/delta_twist_cmds Cartesian velocity commands into joint trajectories in real time
-    # (IK, joint limits, self-collision), independent of move_group's plan-and-execute pipeline. Consumed by demo_app's arm_servo_keyboard node.
+    # moveit_servo's servo_node: streams /servo_node/delta_twist_cmds Cartesian velocity commands into joint 
+    # trajectories in real time (IK, joint limits, self-collision), independent of move_group's plan-and-execute
+    # pipeline. Consumed by mecanum_manipulator_control's arm_servo_keyboard node.
     servo_node = Node(
         package="moveit_servo",
         executable="servo_node",
@@ -225,7 +234,8 @@ def generate_launch_description():
         ],
     )
 
-    # Delay everything that needs the arm's controllers/TF/move_group until the Webots controller connection is actually up
+    # Delay everything that needs the arm's controllers/TF/move_group until the Webots controller connection is 
+    # actually up
     waiting_nodes = WaitForControllerConnection(
         target_driver=platform_driver,
         nodes_to_start=[

@@ -1,9 +1,12 @@
 """
 ROS2 node that estimates the pose and velocity of the mecanum-wheeled mobile platform by integrating wheel encoder readings.
 
-This module implements the OdometryPublisher class, a standard ROS2 node that subscribes to wheel encoder positions published by MecanumRobotDriver,
-applies mecanum forward kinematics to compute body velocity, integrates it over time to estimate the robot pose and publishes the result as a
-nav_msgs/Odometry message.
+This module implements the OdometryPublisher class, a standard ROS2 node that subscribes to wheel encoder positions published
+by MecanumRobotDriver, applies mecanum forward kinematics to compute body velocity, integrates it over time to estimate the
+robot pose and publishes the result as a nav_msgs/Odometry message.
+
+Usage:
+    ros2 run mobile_platform_sim odometry_publisher
 
 ROS2 topics
 Subscribed:
@@ -72,7 +75,8 @@ class OdometryPublisher(Node):
 
         Args:
             joint_states_msg: sensor_msgs.msg.JointState
-                Message containing the cumulative angular position [rad] of all four wheels in the order [front-left, front-right, back-left, back-right].
+                Message containing the cumulative angular position [rad] of all four wheels in the order [front-left, 
+                front-right, back-left, back-right].
         """
         self.joint_states = joint_states_msg
 
@@ -80,8 +84,9 @@ class OdometryPublisher(Node):
         """
         Compute body velocity from wheel encoder deltas using forward kinematics.
 
-        Estimates each wheel's angular velocity by finite difference between the current and previous encoder positions divided by the timer period dt.
-        Applies the mecanum forward kinematics matrix J to map the four wheel velocities to the three-dimensional body velocity [Vx, Vy, wz].
+        Estimates each wheel's angular velocity by finite difference between the current and previous encoder positions
+        divided by the timer period dt. Applies the mecanum forward kinematics matrix J to map the four wheel velocities
+        to the three-dimensional body velocity [Vx, Vy, wz].
         Mecanum forward kinematics matrix::
             J = (R/4) * [[ 1,  1,  1,  1],
                          [-1,  1,  1, -1],
@@ -92,7 +97,9 @@ class OdometryPublisher(Node):
             numpy.ndarray:
                 Shape (3, 1) body velocity vector [Vx (m/s), Vy (m/s), wz (rad/s)]^T.
         """
-        vel_motors = (np.array(self.joint_states.position) - self.previous_wheel_positions) / self.dt
+        vel_motors = (
+            np.array(self.joint_states.position) - self.previous_wheel_positions
+        ) / self.dt
 
         # Update previous positions for the next call
         self.previous_wheel_positions = self.joint_states.position
@@ -100,9 +107,7 @@ class OdometryPublisher(Node):
         d = L_X + L_Y
 
         J = (WHEEL_RADIUS / 4) * np.array(
-            [[  1,        1,        1,          1], 
-             [  -1,       1,        1,          -1], 
-             [  -1 / d,   1 / d,    -1 / d,     1 / d]]
+            [[1, 1, 1, 1], [-1, 1, 1, -1], [-1 / d, 1 / d, -1 / d, 1 / d]]
         )
 
         q_dot = np.dot(J, vel_motors.reshape((4, 1)))
@@ -115,8 +120,10 @@ class OdometryPublisher(Node):
 
         Called at 100 Hz by the ROS2 timer. Performs the following steps:
         1. Calls get_robot_speed to obtain the current body velocity.
-        2. Integrates velocity over dt using a rotation matrix to account for the current heading (theta), updating the pose state vector q.
-        3. Broadcasts the odom -> base_footprint TF transform (currently disabled — uncomment self.tf_broadcaster.sendTransform(t) to enable).
+        2. Integrates velocity over dt using a rotation matrix to account for the current heading (theta), updating the
+          pose state vector q.
+        3. Broadcasts the odom -> base_footprint TF transform (currently disabled — uncomment 
+        self.tf_broadcaster.sendTransform(t) to enable).
         4. Builds and publishes a nav_msgs/Odometry message with pose, twist and a fixed diagonal covariance.
         """
         q_dot = self.compute_body_velocity()
@@ -127,9 +134,9 @@ class OdometryPublisher(Node):
         # Rotation matrix from body frame to odom frame (rotate by current yaw)
         rot_m = np.array(
             [
-                [np.cos(self.q[2, 0]), -np.sin(self.q[2,0]), 0],
-                [np.sin(self.q[2, 0]),  np.cos(self.q[2,0]), 0],
-                [0,                     0,                   1],
+                [np.cos(self.q[2, 0]), -np.sin(self.q[2, 0]), 0],
+                [np.sin(self.q[2, 0]), np.cos(self.q[2, 0]), 0],
+                [0, 0, 1],
             ]
         )
 
@@ -193,7 +200,7 @@ def main(args=None):
     Initialises rclpy, creates and spins the OdometryPublisher node until shutdown and calls rclpy.shutdown().
 
     Args:
-        args: 
+        args:
           Command-line arguments passed to rclpy.init(). Defaults to None, in which case sys.argv is used.
     """
     rclpy.init(args=args)

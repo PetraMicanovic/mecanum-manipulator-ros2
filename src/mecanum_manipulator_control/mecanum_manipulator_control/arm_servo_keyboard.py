@@ -1,9 +1,9 @@
 """
 ROS2 node for real-time keyboard jogging of the rv3sdb arm via moveit_servo.
 
-Unlike mecanum_platform_controller.py, which drives the platform directly, this node publishes Cartesian
-velocity commands to moveit_servo. The servo node converts them into joint trajectories in real
-time using inverse kinematics while respecting joint limits and collision checking.
+Unlike mecanum_platform_controller.py, which drives the platform directly, this node publishes 
+Cartesian velocity commands to moveit_servo. The servo node converts them into joint trajectories
+in real time using inverse kinematics while respecting joint limits and collision checking.
 
 Two jogging modes are supported, toggled at runtime with the 'm' key:
   - JOINT mode: drives individual joints directly via JointJog messages. No IK/Jacobian is

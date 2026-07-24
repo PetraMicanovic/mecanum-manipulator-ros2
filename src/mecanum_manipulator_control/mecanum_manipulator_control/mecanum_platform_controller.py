@@ -1,13 +1,17 @@
 """
-ROS2 node for controlling the mecanum-wheeled mobile platform in three modes, selected via the ROS2 parameter 'mode' at launch time.
+ROS2 node for controlling the mecanum-wheeled mobile platform in three modes, selected via the 
+ROS2 parameter 'mode' at launch time.
 
 Modes:
     keyboard
-        Single-key WASD-style control using raw terminal input. The platform moves while a recognised key is held and stops on any unrecognised key.
+        Single-key WASD-style control using raw terminal input. The platform moves while a 
+        recognised key is held and stops on any unrecognised key.
     sequence
-        The platform executes a predefined sequence of movements autonomously. Translational steps are specified in metres, rotational steps in degrees.
+        The platform executes a predefined sequence of movements autonomously. Translational 
+        steps are specified in metres, rotational steps in degrees.
     terminal
-        The user types movement commands into the terminal. Translational commands take a distance in metres, rotational commands take an angle in degrees.
+        The user types movement commands into the terminal. Translational commands take a 
+        distance in metres, rotational commands take an angle in degrees.
 
 Usage:
     ros2 run mecanum_manipulator_control mecanum_platform_controller
@@ -93,8 +97,9 @@ PLATFORM_SEQUENCE = [
 
 class MecanumPlatformController(Node):
     """
-    ROS2 node for mecanum platform control in keyboard, sequence or terminal mode. The active mode is selected via the ROS2 parameter 'mode' at launch
-    time. All modes publish geometry_msgs/Twist on /cmd_vel.
+    ROS2 node for mecanum platform control in keyboard, sequence or terminal mode. The active mode
+    is selected via the ROS2 parameter 'mode' at launch time. All modes publish 
+    geometry_msgs/Twist on /cmd_vel.
     """
 
     def __init__(self):
@@ -168,8 +173,9 @@ class MecanumPlatformController(Node):
 
     def run_keyboard(self):
         """
-        Single-key WASD-style control without requiring Enter. Reads one keypress at a time from stdin using raw terminal mode. The platform moves on
-        a recognised key and stops on any other key. Exits on Ctrl+C.
+        Single-key WASD-style control without requiring Enter. Reads one keypress at a time from 
+        stdin using raw terminal mode. The platform moves on a recognised key and stops on any 
+        other key. Exits on Ctrl+C.
         """
         print(KEYBOARD_HELP)
         fd = sys.stdin.fileno()
@@ -245,8 +251,9 @@ class MecanumPlatformController(Node):
 
     def run_terminal(self):
         """
-        Block and read movement commands from stdin interactively. Translational commands take a distance in metres, rotational commands take an angle in
-        degrees. Duration is computed automatically.
+        Block and read movement commands from stdin interactively. Translational commands take a 
+        distance in metres, rotational commands take an angle in degrees. Duration is computed 
+        automatically.
         """
         print(TERMINAL_HELP)
         while rclpy.ok():
@@ -313,8 +320,8 @@ class MecanumPlatformController(Node):
 
 def main(args=None):
     """
-    Entry point for the mecanum_platform_controller node. Initialises rclpy, spins the node in a background thread and runs the selected control mode in the main
-    thread.
+    Entry point for the mecanum_platform_controller node. Initialises rclpy, spins the node in a 
+    background thread and runs the selected control mode in the main thread.
     """
     rclpy.init(args=args)
     node = MecanumPlatformController()

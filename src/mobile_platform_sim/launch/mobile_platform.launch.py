@@ -1,8 +1,9 @@
 """
 ROS2 launch file for the mecanum-wheeled mobile platform simulation in Webots.
 
-This launch file starts the Webots simulation together with all ROS2 nodes required for the mobile platform, including the Webots controller, 
-robot_state_publisher, joint_state_publisher, odometry_publisher, TF publishers and optionally RViz2.
+This launch file starts the Webots simulation together with all ROS2 nodes required for the mobile platform,
+including the Webots controller, robot_state_publisher, joint_state_publisher, odometry_publisher, TF 
+publishers and optionally RViz2.
 
 Usage:
     ros2 launch mobile_platform_sim mobile_platform.launch.py
@@ -31,7 +32,8 @@ def generate_launch_description():
     """
     Generate the launch description for the mobile platform simulation.
 
-    Loads the robot URDF from the installed package share directory and constructs a LaunchDescription containing all required nodes.
+    Loads the robot URDF from the installed package share directory and constructs a LaunchDescription 
+    containing all required nodes.
 
     Returns:
         LaunchDescription
