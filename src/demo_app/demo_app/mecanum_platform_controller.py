@@ -10,10 +10,10 @@ Modes:
         The user types movement commands into the terminal. Translational commands take a distance in metres, rotational commands take an angle in degrees.
 
 Usage:
-    ros2 run demo_app demo_controller
-    ros2 run demo_app demo_controller --ros-args -p mode:=keyboard
-    ros2 run demo_app demo_controller --ros-args -p mode:=sequence
-    ros2 run demo_app demo_controller --ros-args -p mode:=terminal
+    ros2 run demo_app mecanum_platform_controller
+    ros2 run demo_app mecanum_platform_controller --ros-args -p mode:=keyboard
+    ros2 run demo_app mecanum_platform_controller --ros-args -p mode:=sequence
+    ros2 run demo_app mecanum_platform_controller --ros-args -p mode:=terminal
 
 ROS2 topics
 Published:
@@ -91,7 +91,7 @@ PLATFORM_SEQUENCE = [
 ]
 
 
-class DemoController(Node):
+class MecanumPlatformController(Node):
     """
     ROS2 node for mecanum platform control in keyboard, sequence or terminal mode. The active mode is selected via the ROS2 parameter 'mode' at launch
     time. All modes publish geometry_msgs/Twist on /cmd_vel.
@@ -101,7 +101,7 @@ class DemoController(Node):
         """
         Initialise the node, declare the mode parameter and create the publisher.
         """
-        super().__init__("demo_controller")
+        super().__init__("mecanum_platform_controller")
 
         # Declare ROS2 parameter for mode selection
         self.declare_parameter("mode", "keyboard")
@@ -313,11 +313,11 @@ class DemoController(Node):
 
 def main(args=None):
     """
-    Entry point for the demo_controller node. Initialises rclpy, spins the node in a background thread and runs the selected control mode in the main
+    Entry point for the mecanum_platform_controller node. Initialises rclpy, spins the node in a background thread and runs the selected control mode in the main
     thread.
     """
     rclpy.init(args=args)
-    node = DemoController()
+    node = MecanumPlatformController()
 
     spin_thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
     spin_thread.start()
