@@ -1,7 +1,7 @@
 """
 ROS2 node for real-time keyboard jogging of the rv3sdb arm via moveit_servo.
 
-Unlike demo_controller.py, which drives the platform directly, this node publishes Cartesian
+Unlike mecanum_platform_controller.py, which drives the platform directly, this node publishes Cartesian
 velocity commands to moveit_servo. The servo node converts them into joint trajectories in real
 time using inverse kinematics while respecting joint limits and collision checking.
 
@@ -101,7 +101,7 @@ JOINT mode (direct per-joint velocity, no IK, no singularity checking):
 class ArmServoKeyboard(Node):
     """
     ROS2 node that streams jog commands to moveit_servo based on raw single-key keyboard input,
-    following the same input-handling pattern as demo_controller.py's keyboard mode.
+    following the same input-handling pattern as mecanum_platform_controller.py's keyboard mode.
 
     Supports two modes: JOINT (direct joint velocities, no IK) and CARTESIAN (task-space velocities 
     resolved to joint motion via moveit_servo's IK). The node starts in JOINT mode so a joint that

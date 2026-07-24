@@ -10,10 +10,10 @@ Modes:
         The user types movement commands into the terminal. Translational commands take a distance in metres, rotational commands take an angle in degrees.
 
 Usage:
-    ros2 run demo_app mecanum_platform_controller
-    ros2 run demo_app mecanum_platform_controller --ros-args -p mode:=keyboard
-    ros2 run demo_app mecanum_platform_controller --ros-args -p mode:=sequence
-    ros2 run demo_app mecanum_platform_controller --ros-args -p mode:=terminal
+    ros2 run mecanum_manipulator_control mecanum_platform_controller
+    ros2 run mecanum_manipulator_control mecanum_platform_controller --ros-args -p mode:=keyboard
+    ros2 run mecanum_manipulator_control mecanum_platform_controller --ros-args -p mode:=sequence
+    ros2 run mecanum_manipulator_control mecanum_platform_controller --ros-args -p mode:=terminal
 
 ROS2 topics
 Published:
@@ -110,7 +110,7 @@ class MecanumPlatformController(Node):
         # Publisher: send velocity commands to MecanumRobotDriver
         self.cmd_vel_pub = self.create_publisher(Twist, "/cmd_vel", 10)
 
-        self.get_logger().info(f"Demo controller started in [{self.mode}] mode.")
+        self.get_logger().info(f"Mecanum platform controller started in [{self.mode}] mode.")
 
     def publish_twist(self, vx, vy, wz):
         """

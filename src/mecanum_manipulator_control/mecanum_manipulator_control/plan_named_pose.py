@@ -7,7 +7,7 @@ import time
 
 from moveit.planning import MoveItPy
 from rclpy.node import Node
-from demo_app.moveit_config_utils import build_moveit_config, build_moveit_cpp_params
+from mecanum_manipulator_control.moveit_config_utils import build_moveit_config, build_moveit_cpp_params
 
 
 def plan_and_execute_named_pose(moveit, target_pose):
