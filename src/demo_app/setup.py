@@ -23,7 +23,8 @@ setup(
         "console_scripts": [
             "mecanum_platform_controller = demo_app.mecanum_platform_controller:main",
             "arm_servo_keyboard = demo_app.arm_servo_keyboard:main",
-            "plan_named_pose = demo_app.plan_named_pose:main"
+            "plan_named_pose = demo_app.plan_named_pose:main",
+            "demo = demo_app.demo:main"
         ],
     },
 )
