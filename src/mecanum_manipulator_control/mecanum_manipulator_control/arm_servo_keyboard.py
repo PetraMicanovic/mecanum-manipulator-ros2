@@ -19,6 +19,9 @@ Published:
         (matches servo_params.yaml's robot_link_command_frame). Used in CARTESIAN mode.
     /servo_node/delta_joint_cmds: control_msgs/JointJog
         Per-joint velocity commands for moveit_servo. Used in JOINT mode.
+
+Usage:
+    ros2 run mecanum_manipulator_control arm_servo_keyboard
 """
 
 import sys

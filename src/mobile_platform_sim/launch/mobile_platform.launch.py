@@ -3,8 +3,16 @@ ROS2 launch file for the mecanum-wheeled mobile platform simulation in Webots.
 
 This launch file starts the Webots simulation together with all ROS2 nodes required for the mobile platform, including the Webots controller, 
 robot_state_publisher, joint_state_publisher, odometry_publisher, TF publishers and optionally RViz2.
-"""
 
+Usage:
+    ros2 launch mobile_platform_sim mobile_platform.launch.py
+    ros2 launch mobile_platform_sim mobile_platform.launch.py rviz:=true
+
+Launch arguments:
+    rviz: bool
+        If true, starts RViz2 alongside the simulation.
+        default: false
+"""
 import os
 import launch
 

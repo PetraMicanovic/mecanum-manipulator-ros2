@@ -4,7 +4,7 @@ to the 'ready_to_push' named pose, then nudge the platform forward so the arm
 pushes the cube on the table.
 
 Usage:
-    ros2 run demo_app demo
+    ros2 run mecanum_manipulator_control demo
 """
 
 import rclpy

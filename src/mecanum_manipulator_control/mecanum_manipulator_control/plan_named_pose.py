@@ -1,5 +1,8 @@
 """
 Utility for planning and executing motions to named SRDF group states using MoveItPy.
+
+Usage:
+    ros2 run mecanum_manipulator_control plan_named_pose
 """
 
 import rclpy

@@ -8,14 +8,32 @@ move_group.launch.py so MoveIt2 can plan/execute against the arm. It also starts
 Wheel joint states (from /wheels_encoders) and arm joint states (from joint_state_broadcaster) are merged into a single /joint_states topic by
 joint_state_publisher's source_list, since robot_state_publisher needs exactly one combined feed to build the whole TF tree (chassis + arm).
 The arm's ros2_control node is remapped so its own "joint_states" topic doesn't collide with that final merged one.
+
+Usage:
+    ros2 launch mobile_platform_with_arm mobile_platform_with_arm.launch.py
+    ros2 launch mobile_platform_with_arm mobile_platform_with_arm.launch.py rviz:=true
+    ros2 launch mobile_platform_with_arm mobile_platform_with_arm.launch.py servo:=false
+    ros2 launch mobile_platform_with_arm mobile_platform_with_arm.launch.py moveit:=false servo:=false
+
+Launch arguments:
+    rviz: bool (default: false)
+        Start a plain rviz2 instance alongside the simulation.
+    moveit: bool (default: true)
+        Include rv3sdb_moveit_config's move_group.launch.py so the arm can be planned through MoveIt2.
+    servo: bool (default: true)
+        Start moveit_servo's servo_node so the arm can be jogged in real time (e.g. via
+        demo_app's arm_servo_keyboard node), alongside move_group's plan-and-execute pipeline.
 """
+
 import os
 import launch
 from launch import LaunchDescription
 from ament_index_python.packages import get_package_share_directory
 from webots_ros2_driver.webots_launcher import WebotsLauncher
 from webots_ros2_driver.webots_controller import WebotsController
-from webots_ros2_driver.wait_for_controller_connection import WaitForControllerConnection
+from webots_ros2_driver.wait_for_controller_connection import (
+    WaitForControllerConnection,
+)
 from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -34,7 +52,9 @@ def _build_moveit_config():
             MoveIt configuration containing robot_description, SRDF, kinematics, joint limits and trajectory execution settings.
     """
     platform_share = get_package_share_directory("mobile_platform_with_arm")
-    urdf_path = os.path.join(platform_share, "resource", "mobile_platform_with_arm.urdf")
+    urdf_path = os.path.join(
+        platform_share, "resource", "mobile_platform_with_arm.urdf"
+    )
     return (
         MoveItConfigsBuilder("rv3sdb", package_name="rv3sdb_moveit_config")
         .robot_description(file_path=urdf_path)
