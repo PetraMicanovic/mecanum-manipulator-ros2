@@ -56,10 +56,14 @@ def generate_launch_description():
         parameters=[{"robot_description": platform_description_path}],
     )
 
+    rviz_config_path = os.path.join(package_dir, "config", "mobile_platform.rviz")
+
     rviz2 = Node(
         package="rviz2",
         executable="rviz2",
         output="screen",
+        arguments=["-d", rviz_config_path],
+        parameters=[{"robot_description": platform_description}],
         condition=launch.conditions.IfCondition(use_rviz),
     )
 
