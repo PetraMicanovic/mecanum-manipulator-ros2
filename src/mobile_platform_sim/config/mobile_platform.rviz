@@ -10,7 +10,7 @@ Panels:
         - /TF1
         - /Odometry1
       Splitter Ratio: 0.5
-    Tree Height: 549
+    Tree Height: 229
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Views
@@ -26,11 +26,23 @@ Visualization Manager:
       Class: rviz_default_plugins/Grid
       Color: 160; 160; 164
       Enabled: true
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
       Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
       Reference Frame: base_footprint
       Value: true
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
       Description Source: Topic
       Description Topic:
         Depth: 5
@@ -39,61 +51,166 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /robot_description
       Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        livox_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        livox_frame2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_bl:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_br:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_fl:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_fr:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Mass Properties:
+        Inertia: false
+        Mass: false
       Name: RobotModel
       TF Prefix: ""
       Update Interval: 0
       Value: true
       Visual Enabled: true
-      Collision Enabled: false
     - Class: rviz_default_plugins/TF
       Enabled: true
+      Filter (blacklist): ""
+      Filter (whitelist): ""
       Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        base_footprint:
+          Value: true
+        base_link:
+          Value: true
+        livox_frame:
+          Value: true
+        livox_frame2:
+          Value: true
+        odom:
+          Value: true
+        wheel_bl:
+          Value: true
+        wheel_br:
+          Value: true
+        wheel_fl:
+          Value: true
+        wheel_fr:
+          Value: true
       Marker Scale: 0.5
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
+      Tree:
+        base_footprint:
+          base_link:
+            livox_frame:
+              {}
+            livox_frame2:
+              {}
+            wheel_bl:
+              {}
+            wheel_br:
+              {}
+            wheel_fl:
+              {}
+            wheel_fr:
+              {}
+        odom:
+          {}
+      Update Interval: 0
       Value: true
-    - Class: rviz_default_plugins/Odometry
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz_default_plugins/Odometry
       Covariance:
-        Position:
-          Alpha: 0.3
-          Color: 204; 51; 204
-          Value: true
         Orientation:
           Alpha: 0.5
           Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
           Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
       Enabled: true
       Keep: 100
       Name: Odometry
-      Position Tolerance: 0.05
-      Angle Tolerance: 0.1
+      Position Tolerance: 0.05000000074505806
       Shape:
         Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
         Color: 255; 25; 0
-        Head Length: 0.3
-        Head Radius: 0.1
+        Head Length: 0.30000001192092896
+        Head Radius: 0.10000000149011612
         Shaft Length: 0.5
-        Shaft Radius: 0.05
+        Shaft Radius: 0.05000000074505806
         Value: Arrow
       Topic:
         Depth: 5
         Durability Policy: Volatile
+        Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /wheel/odometry
       Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
       Class: rviz_default_plugins/PointCloud2
       Color: 255; 255; 255
       Color Transformer: Intensity
+      Decay Time: 0
       Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
       Name: Lidar Front
       Position Transformer: XYZ
+      Selectable: true
       Size (Pixels): 2
-      Size (m): 0.01
+      Size (m): 0.009999999776482582
       Style: Points
       Topic:
         Depth: 5
@@ -102,17 +219,31 @@ Visualization Manager:
         Reliability Policy: Best Effort
         Value: /livox/lidar_front
       Use Fixed Frame: true
+      Use rainbow: true
       Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
       Class: rviz_default_plugins/PointCloud2
       Color: 255; 255; 255
       Color Transformer: Intensity
+      Decay Time: 0
       Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
       Name: Lidar Back
       Position Transformer: XYZ
+      Selectable: true
       Size (Pixels): 2
-      Size (m): 0.01
+      Size (m): 0.009999999776482582
       Style: Points
       Topic:
         Depth: 5
@@ -121,11 +252,12 @@ Visualization Manager:
         Reliability Policy: Best Effort
         Value: /livox/lidar_back
       Use Fixed Frame: true
+      Use rainbow: true
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: base_footprint
+    Fixed Frame: odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -133,21 +265,44 @@ Visualization Manager:
       Hide Inactive Objects: true
     - Class: rviz_default_plugins/MoveCamera
     - Class: rviz_default_plugins/Select
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
       Distance: 3
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
       Focal Point:
         X: 0
         Y: 0
-        Z: 0.2
+        Z: 0.20000000298023224
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
       Name: Current View
-      Near Clip Distance: 0.01
-      Pitch: 0.6
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.6000000238418579
       Target Frame: base_footprint
-      Yaw: 0.8
+      Value: Orbit (rviz_default_plugins)
+      Yaw: 0.800000011920929
+    Saved: ~
 Window Geometry:
+  Displays:
+    collapsed: false
   Height: 900
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd0000000100000000000001c900000326fc0200000003fb000000100044006900730070006c006100790073010000003f00000173000000cc00fffffffb0000001200530065006c0065006300740069006f006e01000001b8000000b40000005d00fffffffb0000000a005600690065007700730100000272000000f3000000a900ffffff000003a90000032600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Selection:
+    collapsed: false
+  Views:
+    collapsed: false
   Width: 1400
-  X: 50
+  X: 66
   Y: 50
