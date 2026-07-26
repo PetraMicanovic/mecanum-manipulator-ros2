@@ -12,6 +12,8 @@ data_files.append(("share/" + package_name, ["package.xml"]))
 
 # Launch files
 data_files.append(("share/" + package_name + "/launch", glob("launch/*.py")))
+# RViz config files
+data_files.append(("share/" + package_name + "/config", glob("config/*.rviz")))
 # Resource files (URDF)
 data_files.append(("share/" + package_name + "/resource", glob("resource/*.urdf")))
 # World files
