@@ -160,7 +160,7 @@ class OdometryPublisher(Node):
         t.transform.rotation.z = quat[2]
         t.transform.rotation.w = quat[3]
 
-        # self.tf_broadcaster.sendTransform(t)
+        self.tf_broadcaster.sendTransform(t)
 
         # Odometry message
         self.odometry.header.stamp = self.get_clock().now().to_msg()
