@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>demo_app</name>
+  <name>mecanum_manipulator_control</name>
   <version>0.0.1</version>
-  <description>Demo application for the mecanum-wheeled mobile platform.
-  Supports three control modes: terminal (typed commands), sequence (autonomous),
-  and keyboard (WASD single-key control). </description>
+  <description> Control and demo application package for the mecanum-wheeled mobile
+  manipulator: platform driving (keyboard, sequence, terminal modes),
+  arm motion planning and execution via MoveIt (named SRDF poses) and
+  combined platform and arm task execution.</description>
   <maintainer email="micanovic.petra@yahoo.com">Petra Micanovic</maintainer>
   <license>MIT</license>
 
@@ -14,6 +15,9 @@
   <exec_depend>rclpy</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>moveit_servo</exec_depend>
+  <exec_depend>moveit_msgs</exec_depend>
+  <exec_depend>moveit_py</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

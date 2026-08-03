@@ -1,19 +1,23 @@
 """
-ROS2 node for controlling the mecanum-wheeled mobile platform in three modes, selected via the ROS2 parameter 'mode' at launch time.
+ROS2 node for controlling the mecanum-wheeled mobile platform in three modes, selected via the 
+ROS2 parameter 'mode' at launch time.
 
 Modes:
     keyboard
-        Single-key WASD-style control using raw terminal input. The platform moves while a recognised key is held and stops on any unrecognised key.
+        Single-key WASD-style control using raw terminal input. The platform moves while a 
+        recognised key is held and stops on any unrecognised key.
     sequence
-        The platform executes a predefined sequence of movements autonomously. Translational steps are specified in metres, rotational steps in degrees.
+        The platform executes a predefined sequence of movements autonomously. Translational 
+        steps are specified in metres, rotational steps in degrees.
     terminal
-        The user types movement commands into the terminal. Translational commands take a distance in metres, rotational commands take an angle in degrees.
+        The user types movement commands into the terminal. Translational commands take a 
+        distance in metres, rotational commands take an angle in degrees.
 
 Usage:
-    ros2 run demo_app demo_controller
-    ros2 run demo_app demo_controller --ros-args -p mode:=keyboard
-    ros2 run demo_app demo_controller --ros-args -p mode:=sequence
-    ros2 run demo_app demo_controller --ros-args -p mode:=terminal
+    ros2 run mecanum_manipulator_control mecanum_platform_controller
+    ros2 run mecanum_manipulator_control mecanum_platform_controller --ros-args -p mode:=keyboard
+    ros2 run mecanum_manipulator_control mecanum_platform_controller --ros-args -p mode:=sequence
+    ros2 run mecanum_manipulator_control mecanum_platform_controller --ros-args -p mode:=terminal
 
 ROS2 topics
 Published:
@@ -91,17 +95,18 @@ PLATFORM_SEQUENCE = [
 ]
 
 
-class DemoController(Node):
+class MecanumPlatformController(Node):
     """
-    ROS2 node for mecanum platform control in keyboard, sequence or terminal mode. The active mode is selected via the ROS2 parameter 'mode' at launch
-    time. All modes publish geometry_msgs/Twist on /cmd_vel.
+    ROS2 node for mecanum platform control in keyboard, sequence or terminal mode. The active mode
+    is selected via the ROS2 parameter 'mode' at launch time. All modes publish 
+    geometry_msgs/Twist on /cmd_vel.
     """
 
     def __init__(self):
         """
         Initialise the node, declare the mode parameter and create the publisher.
         """
-        super().__init__("demo_controller")
+        super().__init__("mecanum_platform_controller")
 
         # Declare ROS2 parameter for mode selection
         self.declare_parameter("mode", "keyboard")
@@ -110,7 +115,7 @@ class DemoController(Node):
         # Publisher: send velocity commands to MecanumRobotDriver
         self.cmd_vel_pub = self.create_publisher(Twist, "/cmd_vel", 10)
 
-        self.get_logger().info(f"Demo controller started in [{self.mode}] mode.")
+        self.get_logger().info(f"Mecanum platform controller started in [{self.mode}] mode.")
 
     def publish_twist(self, vx, vy, wz):
         """
@@ -168,8 +173,9 @@ class DemoController(Node):
 
     def run_keyboard(self):
         """
-        Single-key WASD-style control without requiring Enter. Reads one keypress at a time from stdin using raw terminal mode. The platform moves on
-        a recognised key and stops on any other key. Exits on Ctrl+C.
+        Single-key WASD-style control without requiring Enter. Reads one keypress at a time from 
+        stdin using raw terminal mode. The platform moves on a recognised key and stops on any 
+        other key. Exits on Ctrl+C.
         """
         print(KEYBOARD_HELP)
         fd = sys.stdin.fileno()
@@ -193,15 +199,37 @@ class DemoController(Node):
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
             self.stop()
 
-    def run_sequence(self):
+    def run_sequence(self, sequence=None):
         """
-        Execute the predefined PLATFORM_SEQUENCE autonomously. Translational steps use distance [m], rotational steps use angle [deg]. Duration is computed
-        automatically from the distance/angle and the corresponding default velocity.
+        Execute a sequence of movement steps autonomously. Defaults to the module-level
+        PLATFORM_SEQUENCE if no custom sequence is given. Translational steps use distance [m],
+        rotational steps use angle [deg].
+
+        Args:
+        sequence: list[tuple] or None
+            List of movement steps to execute, where each step is a tuple:
+            (cmd_type, vx, vy, wz, value)
+                cmd_type: str
+                    'linear' or 'angular'.
+                vx, vy: float
+                    Linear velocity components [m/s] (used when cmd_type == 'linear').
+                wz: float
+                    Angular velocity [rad/s] (used when cmd_type == 'angular').
+                value: float
+                    Distance [m] for 'linear' steps or angle [deg] for 'angular' steps.
+            If None, the module-level PLATFORM_SEQUENCE is used instead.
+
+        Returns:
+            None
         """
+        if sequence is not None:
+            sequence = sequence
+        else:
+            sequence = PLATFORM_SEQUENCE
         self.get_logger().info("Running predefined sequence...")
         rate_hz = 10
 
-        for step in PLATFORM_SEQUENCE:
+        for step in sequence:
             if not rclpy.ok():
                 break
 
@@ -223,8 +251,9 @@ class DemoController(Node):
 
     def run_terminal(self):
         """
-        Block and read movement commands from stdin interactively. Translational commands take a distance in metres, rotational commands take an angle in
-        degrees. Duration is computed automatically.
+        Block and read movement commands from stdin interactively. Translational commands take a 
+        distance in metres, rotational commands take an angle in degrees. Duration is computed 
+        automatically.
         """
         print(TERMINAL_HELP)
         while rclpy.ok():
@@ -291,11 +320,11 @@ class DemoController(Node):
 
 def main(args=None):
     """
-    Entry point for the demo_controller node. Initialises rclpy, spins the node in a background thread and runs the selected control mode in the main
-    thread.
+    Entry point for the mecanum_platform_controller node. Initialises rclpy, spins the node in a 
+    background thread and runs the selected control mode in the main thread.
     """
     rclpy.init(args=args)
-    node = DemoController()
+    node = MecanumPlatformController()
 
     spin_thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
     spin_thread.start()
@@ -313,8 +342,9 @@ def main(args=None):
             )
     finally:
         node.stop()
-        node.destroy_node()
         rclpy.shutdown()
+        spin_thread.join()
+        node.destroy_node()
 
 
 if __name__ == "__main__":

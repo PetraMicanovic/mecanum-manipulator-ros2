@@ -1,0 +1,405 @@
+<!-- 
+URDF description for the mecanum-wheeled mobile platform with the rv3sdb (Mitsubishi Melfa RV-3SDB,
+6DOF) manipulator. 
+
+This file is  derived from mobile_platform.urdf. The platform part (chassis, wheels, lidars) is
+unchanged. The arm part is ported from the original ROS1 melfa_description xacro
+(urdf/rv3sdb.urdf.xacro + rv3sdb.xacro), flattened out of xacro into plain URDF and re-mounted onto
+base?link instead of its own free-standing base_link.
+
+TF tree:
+    base_link
+    |__ wheel_fl / wheel_fr / wheel_bl / wheel_br
+    |__ livox_frame/ livox_frame2
+    |__ link0 (arm_mounting_joint, fixed)
+        |__ link1 (joint1, revolute, Z axis)
+             |__ link2 (joint2, revolute, Y axis)
+                  |__ link3 (joint3, revolute, Y axis)
+                        |__ link4 (joint4, revolute, X axis)
+                            |__ link5 (joint5, revolute, Y axis)
+                                |__ link6 (joint6, revolute, X axis)
+                                    |__ tool_link (tcp, fixed)
+                                
+-->
+
+<robot name="mobile_platform_with_arm">
+    <!-- ============================ PLATFORM GEOMETRY (unchanged) ============================ -->
+    <link name="base_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/chassis.stl" />
+            </geometry>
+            <material name="white">
+                <color rgba="1.0 1.0 1.0 1.0" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/chassis.stl" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="wheel_fl">
+        <visual>
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+            <geometry>
+                <cylinder length="0.077" radius="0.1015" />
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+            <geometry>
+                <cylinder length="0.077" radius="0.1015" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="wheel_fr">
+        <visual>
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+            <geometry>
+                <cylinder length="0.077" radius="0.1015" />
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+            <geometry>
+                <cylinder length="0.077" radius="0.1015" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="wheel_bl">
+        <visual>
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+            <geometry>
+                <cylinder length="0.077" radius="0.1015" />
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+            <geometry>
+                <cylinder length="0.077" radius="0.1015" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="wheel_br">
+        <visual>
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+            <geometry>
+                <cylinder length="0.077" radius="0.1015" />
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+            <geometry>
+                <cylinder length="0.077" radius="0.1015" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="livox_frame">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/livox_mount.stl" />
+            </geometry>
+            <material name="white">
+                <color rgba="1.0 1.0 1.0 1.0" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/livox_mount.stl" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="livox_frame2">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/livox_mount.stl" />
+            </geometry>
+            <material name="white">
+                <color rgba="1.0 1.0 1.0 1.0" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/livox_mount.stl" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="motor_fl" type="continuous">
+        <origin rpy="0 0 0" xyz="0.2505 0.26536 0" />
+        <parent link="base_link" />
+        <child link="wheel_fl" />
+        <axis xyz="0 1 0" />
+        <limit effort="100" velocity="100" />
+    </joint>
+    <joint name="motor_fr" type="continuous">
+        <origin rpy="0 0 0" xyz="0.2505 -0.26536 0" />
+        <parent link="base_link" />
+        <child link="wheel_fr" />
+        <axis xyz="0 1 0" />
+        <limit effort="100" velocity="100" />
+    </joint>
+    <joint name="motor_bl" type="continuous">
+        <origin rpy="0 0 0" xyz="-0.2505 0.26536 0" />
+        <parent link="base_link" />
+        <child link="wheel_bl" />
+        <axis xyz="0 1 0" />
+        <limit effort="100" velocity="100" />
+    </joint>
+    <joint name="motor_br" type="continuous">
+        <origin rpy="0 0 0" xyz="-0.2505 -0.26536 0" />
+        <parent link="base_link" />
+        <child link="wheel_br" />
+        <axis xyz="0 1 0" />
+        <limit effort="100" velocity="100" />
+    </joint>
+    <joint name="livox_joint1" type="fixed">
+        <origin rpy="0 0 0" xyz="0.4583 0 0.0927" />
+        <parent link="base_link" />
+        <child link="livox_frame" />
+    </joint>
+    <joint name="livox_joint2" type="fixed">
+        <origin rpy="0 0 3.14159" xyz="-0.4583 0 0.0927" />
+        <parent link="base_link" />
+        <child link="livox_frame2" />
+    </joint>
+
+    <!-- ============================ ARM GEOMETRY (rv3sdb, 6 DOF) ============================ -->
+    <material name="arm_white">
+        <color rgba="1.0 1.0 1.0 1.0" />
+    </material>
+
+    <link name="link0">
+        <visual>
+            <origin rpy="1.5708 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/base.stl" />
+            </geometry>
+            <material name="arm_white" />
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/base.stl" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="link1">
+        <visual>
+            <origin rpy="1.5708 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/shoulder.stl" />
+            </geometry>
+            <material name="arm_white" />
+        </visual>
+        <collision>
+            <origin rpy="1.5708 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/shoulder.stl" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="link2">
+        <visual>
+            <origin rpy="1.5708 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/upper_arm.stl" />
+            </geometry>
+            <material name="arm_white" />
+        </visual>
+        <collision>
+            <origin rpy="1.5708 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/upper_arm.stl" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="link3">
+        <visual>
+            <origin rpy="1.5708 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/elbow.stl" />
+            </geometry>
+            <material name="arm_white" />
+        </visual>
+        <collision>
+            <origin rpy="1.5708 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/elbow.stl" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="link4">
+        <visual>
+            <origin rpy="3.14159 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/fore_arm.stl" />
+            </geometry>
+            <material name="arm_white" />
+        </visual>
+        <collision>
+            <origin rpy="3.14159 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/fore_arm.stl" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="link5">
+        <visual>
+            <origin rpy="3.14159 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/wrist.stl" />
+            </geometry>
+            <material name="arm_white" />
+        </visual>
+        <collision>
+            <origin rpy="3.14159 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="package://mobile_platform_with_arm/meshes/arm/wrist.stl" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="link6">
+        <visual>
+            <origin rpy="3.14159 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh
+                    filename="package://mobile_platform_with_arm/meshes/arm/mounting_interface.stl" />
+            </geometry>
+            <material name="arm_white" />
+        </visual>
+        <collision>
+            <origin rpy="3.14159 0 1.5708" xyz="0 0 0" />
+            <geometry>
+                <mesh
+                    filename="package://mobile_platform_with_arm/meshes/arm/mounting_interface.stl" />
+            </geometry>
+        </collision>
+    </link>
+    <!-- Gripper mesh (hvataljka.stl) was not provided, so tool_link is a bare frame for now. -->
+    <link name="tool_link" />
+
+    <!-- Mount the arm on top of the chassis. -->
+    <joint name="arm_mounting_joint" type="fixed">
+        <origin rpy="0 0 0" xyz="0.25 0 0.325" />
+        <parent link="base_link" />
+        <child link="link0" />
+    </joint>
+    <joint name="joint1" type="revolute">
+        <origin rpy="0 0 0" xyz="0 0 0.255" />
+        <parent link="link0" />
+        <child link="link1" />
+        <axis xyz="0 0 1" />
+        <limit lower="-2.96706" upper="2.96706" effort="50.0" velocity="4.36332" />
+    </joint>
+    <joint name="joint2" type="revolute">
+        <origin rpy="0 0 0" xyz="0.095 0.108 0.095" />
+        <parent link="link1" />
+        <child link="link2" />
+        <axis xyz="0 1 0" />
+        <limit lower="-1.5708" upper="2.35619" effort="50.0" velocity="3.26377" />
+    </joint>
+    <joint name="joint3" type="revolute">
+        <origin rpy="0 -1.5708 0" xyz="0 -0.044 0.245" />
+        <parent link="link2" />
+        <child link="link3" />
+        <axis xyz="0 1 0" />
+        <limit lower="-0.349066" upper="2.98451" effort="50.0" velocity="4.36332" />
+    </joint>
+    <joint name="joint4" type="revolute">
+        <origin rpy="0 0 0" xyz="0.055 -0.064 0.135" />
+        <parent link="link3" />
+        <child link="link4" />
+        <axis xyz="1 0 0" />
+        <limit lower="-2.79253" upper="2.79253" effort="20.0" velocity="7.19076" />
+    </joint>
+    <joint name="joint5" type="revolute">
+        <origin rpy="0 0 0" xyz="0.215 0.037 0" />
+        <parent link="link4" />
+        <child link="link5" />
+        <axis xyz="0 1 0" />
+        <limit lower="-2.0944" upper="2.0944" effort="20.0" velocity="7.19076" />
+    </joint>
+    <joint name="joint6" type="revolute">
+        <origin rpy="0 0 0" xyz="0.062 -0.037 0" />
+        <parent link="link5" />
+        <child link="link6" />
+        <axis xyz="1 0 0" />
+        <limit lower="-6.28319" upper="6.28319" effort="10.0" velocity="11.5192" />
+    </joint>
+    <joint name="tcp" type="fixed">
+        <origin rpy="0 0 0" xyz="0.039 0 0" />
+        <parent link="link6" />
+        <child link="tool_link" />
+    </joint>
+
+    <!-- ========================= ros2_control (arm only) ============================ -->
+    <!-- Only the 6 arm joints are exposed here for MoveIt2 / joint_trajectory_controller. -->
+    <ros2_control name="ArmWebotsControl" type="system">
+        <hardware>
+            <plugin>webots_ros2_control::Ros2ControlSystem</plugin>
+        </hardware>
+        <joint name="joint1">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+        <joint name="joint2">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+        <joint name="joint3">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+        <joint name="joint4">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+        <joint name="joint5">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+        <joint name="joint6">
+            <command_interface name="position" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+        </joint>
+    </ros2_control>
+
+    <!-- ======================== WEBOTS / ROS2 PLUGINS ============================ -->
+    <webots>
+        <!-- Custom mecanum kinematics controller (unchanged, wheels only) -->
+        <plugin type="mobile_platform_sim.mecanum_robot_driver.MecanumRobotDriver" />
+        <!-- ros2_control bridge for the arm joints -->
+        <plugin type="webots_ros2_control::Ros2Control" />
+        <device reference="lidar" type="Lidar">
+            <ros>
+                <enabled>true</enabled>
+                <updateRate>10</updateRate>
+                <topicName>/livox/lidar_front</topicName>
+                <frameName>livox_frame</frameName>
+            </ros>
+        </device>
+        <device reference="lidar2" type="Lidar">
+            <ros>
+                <enabled>true</enabled>
+                <updateRate>10</updateRate>
+                <topicName>/livox/lidar_back</topicName>
+                <frameName>livox_frame2</frameName>
+            </ros>
+        </device>
+    </webots>
+
+</robot>

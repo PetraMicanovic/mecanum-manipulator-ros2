@@ -1,10 +1,11 @@
 """
 Webots ROS2 plugin (controller) for the mecanum-wheeled mobile platform.
 
-This module implements the MecanumRobotDriver class, which serves as the bridge between the Webots simulation and ROS2.
-This node is responsible for initializing the Webots motors, encoders and lidars. It receives velocity commands from the /cmd_vel (geometry_msgs/Twist)
-topic, computes the required angular velocity for each mecanum wheel and sends these commands to the motors. In addition, it publishes wheel encoder
-readings on the /wheels_encoders (sensor_msgs/JointState) topic, allowing odometry_publisher to estimate the robot's odometry.
+This module implements the MecanumRobotDriver class, which serves as the bridge between the Webots simulation
+and ROS2. This node is responsible for initializing the Webots motors, encoders and lidars. It receives velocity
+commands from the /cmd_vel (geometry_msgs/Twist) topic, computes the required angular velocity for each mecanum 
+wheel and sends these commands to the motors. In addition, it publishes wheel encoder readings on the /wheels_encoders
+(sensor_msgs/JointState) topic, allowing odometry_publisher to estimate the robot's odometry.
 
 ROS2 topics
 Subscribed:
@@ -38,12 +39,13 @@ class MecanumRobotDriver:
         """
         Initialize devices, ROS2 node, publisher, and subscriber.
 
-        Called once by webots_ros2_driver when the controller is loaded. Sets up all Webots devices and creates the ROS2 node that handles velocity
-        commands and joint-state publishing.
+        Called once by webots_ros2_driver when the controller is loaded. Sets up all Webots devices and creates the 
+        ROS2 node that handles velocity commands and joint-state publishing.
 
         Args:
             webots_node:
-                The Webots controller node provided by webots_ros2_driver. Exposes webots_node.robot which is the entry point for all device access.
+                The Webots controller node provided by webots_ros2_driver. Exposes webots_node.robot which is the 
+                entry point for all device access.
             properties: dict
                 Plugin properties
         """
@@ -120,12 +122,13 @@ class MecanumRobotDriver:
 
     def step(self):
         """
-        Execute one simulation step: process ROS2 messages, compute and apply wheel velocities, and publish encoder states.
+        Execute one simulation step: process ROS2 messages, compute and apply wheel velocities, and publish 
+        encoder states.
 
         Called by Webots on every simulation timestep (every 32 ms). The method performs three tasks in order:
             1. Spin ROS2 — process any pending incoming messages so that __cmd_vel_callback can update __target_twist.
-            2. Inverse kinematics — convert the desired body twist (Vx, Vy, ω) into four individual wheel angular velocities using the standard mecanum
-            wheel model:
+            2. Inverse kinematics — convert the desired body twist (Vx, Vy, ω) into four individual wheel 
+            angular velocities using the standard mecanum wheel model:
                 ω_FL = ( Vx - Vy - (Lx + Ly) * ω ) / R
                 ω_FR = ( Vx + Vy + (Lx + Ly) * ω ) / R
                 ω_BL = ( Vx + Vy - (Lx + Ly) * ω ) / R
