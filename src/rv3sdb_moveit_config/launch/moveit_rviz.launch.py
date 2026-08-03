@@ -61,10 +61,17 @@ def generate_launch_description():
     """
     moveit_config = _build_moveit_config()
 
+    rviz_config_path = os.path.join(
+        get_package_share_directory("rv3sdb_moveit_config"),
+        "config",
+        "moveit.rviz",
+    )
+
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
         output="log",
+        arguments=["-d", rviz_config_path],
         parameters=[
             moveit_config.robot_description,
             moveit_config.robot_description_semantic,
