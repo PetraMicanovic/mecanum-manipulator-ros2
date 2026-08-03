@@ -159,10 +159,17 @@ def generate_launch_description():
 
     moveit_config = _build_moveit_config()
 
+    rviz_config_path = os.path.join(
+        get_package_share_directory("rv3sdb_moveit_config"),
+        "config",
+        "moveit.rviz",
+    )
+
     rviz2 = Node(
         package="rviz2",
         executable="rviz2",
         output="screen",
+        arguments=["-d", rviz_config_path],
         condition=launch.conditions.IfCondition(use_rviz),
         parameters=[
             moveit_config.robot_description,
